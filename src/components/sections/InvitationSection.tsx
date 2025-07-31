@@ -30,7 +30,7 @@ export const InvitationSection = ({
 
         <div className="flex justify-center items-center gap-8 text-lg text-gray-800">
           <div className="text-center">
-            <div className="mb-2">
+            <div className="mb-2 whitespace-nowrap">
               <span className="text-gray-600">{groom.father}</span>
               <span className="mx-2">·</span>
               <span className="text-gray-600">{groom.mother}</span>
@@ -46,7 +46,7 @@ export const InvitationSection = ({
           </div>
 
           <div className="text-center">
-            <div className="mb-2">
+            <div className="mb-2 whitespace-nowrap">
               <span className="text-gray-600">{bride.father}</span>
               <span className="mx-2">·</span>
               <span className="text-gray-600">{bride.mother}</span>
