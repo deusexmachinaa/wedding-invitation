@@ -44,6 +44,7 @@ export const HeaderSection = ({
         >
           <h1 className="text-2xl sm:text-3xl font-light text-gray-600 mb-2">
             Wedding Invitation
+            {/* 사진으로 수정해야함 */}
           </h1>
           <div className="w-24 h-0.5 bg-gradient-to-r from-rose-300 to-pink-300 mx-auto"></div>
         </motion.div>
@@ -99,8 +100,8 @@ export const HeaderSection = ({
           className="mb-12"
         >
           <p className="text-base sm:text-lg text-gray-600 font-light">
-            {ceremony.venue} {ceremony.floor && ceremony.floor}{" "}
-            {ceremony.hall && ceremony.hall}
+            {ceremony.venue} {ceremony.floor && ceremony.floor}
+            {","} {ceremony.hall && ceremony.hall}
           </p>
           <p className="text-sm text-gray-500 mt-1">{ceremony.address}</p>
         </motion.div>
