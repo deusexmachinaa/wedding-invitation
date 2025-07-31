@@ -16,19 +16,19 @@ export const InvitationSection = ({
 }: InvitationSectionProps) => {
   return (
     <section className="py-16 px-6 bg-white">
-      <div className="max-w-2xl mx-auto text-center">
+      <div className="max-w-2xl mx-auto text-center font-jua">
         <SectionHeader
           englishTitle="INVITATION"
           koreanTitle="소중한 분들을 초대합니다"
         />
 
         <div className="mb-12">
-          <p className="text-lg leading-relaxed text-gray-700 whitespace-pre-line">
+          <p className="text-lg leading-relaxed text-gray-700 whitespace-pre-line font-jua">
             {message}
           </p>
         </div>
 
-        <div className="flex justify-center items-center gap-8 text-lg text-gray-800">
+        <div className="flex justify-center items-center gap-8 text-lg text-gray-800 ">
           <div className="text-center">
             <div className="mb-2 whitespace-nowrap">
               <span className="text-gray-600">{groom.father}</span>
