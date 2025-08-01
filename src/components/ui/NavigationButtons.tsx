@@ -1,6 +1,6 @@
 "use client";
 
-import { Navigation, MapPin, Car } from "lucide-react";
+import Image from "next/image";
 
 interface NavigationButtonsProps {
   venueName: string;
@@ -132,21 +132,45 @@ export const NavigationButtons = ({
     {
       id: "naver",
       name: "네이버지도",
-      icon: <MapPin className="w-4 h-4" />,
+      icon: (
+        <Image
+          src="/icons/naver-map.png"
+          alt="네이버지도"
+          width={16}
+          height={16}
+          className="object-contain"
+        />
+      ),
       color: "bg-green-100 text-green-600 hover:bg-green-200",
       onClick: () => handleNavigation("naver"),
     },
     {
       id: "kakao",
-      name: "카카오내비",
-      icon: <Navigation className="w-4 h-4" />,
+      name: "카카오네비",
+      icon: (
+        <Image
+          src="/icons/kakao-navi.png"
+          alt="카카오네비"
+          width={16}
+          height={16}
+          className="object-contain"
+        />
+      ),
       color: "bg-yellow-100 text-yellow-600 hover:bg-yellow-200",
       onClick: () => handleNavigation("kakao"),
     },
     {
       id: "tmap",
       name: "티맵",
-      icon: <Car className="w-4 h-4" />,
+      icon: (
+        <Image
+          src="/icons/tmap.png"
+          alt="티맵"
+          width={16}
+          height={16}
+          className="object-contain"
+        />
+      ),
       color: "bg-blue-100 text-blue-600 hover:bg-blue-200",
       onClick: () => handleNavigation("tmap"),
     },
