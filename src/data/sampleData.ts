@@ -83,7 +83,7 @@ export const sampleWeddingData: WeddingData = {
     {
       bank: "신한은행",
       accountNumber: "110-000-0000000",
-      accountHolder: "김희망",
+      accountHolder: "이태훈",
     },
     {
       bank: "신한은행",
