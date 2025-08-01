@@ -83,8 +83,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
       audio.currentTime = newTime;
       setCurrentTime(newTime);
     }
-
-    console.log("🎯 클릭으로 시간 변경:", { progressPercent, newTime });
   };
 
   const handleProgressMouseDown = (e: React.MouseEvent) => {
@@ -99,8 +97,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
       e.clientX
     );
     setTempProgressPercent(progressPercent);
-
-    console.log("🎯 드래그 시작:", { progressPercent });
   };
 
   const handleProgressMouseMove = (e: React.MouseEvent) => {
@@ -111,8 +107,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
       e.clientX
     );
     setTempProgressPercent(progressPercent);
-
-    console.log("🎯 드래그 중:", { progressPercent });
   };
 
   // 🎯 터치 이벤트 핸들러들
@@ -127,8 +121,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
       e.touches[0].clientX
     );
     setTempProgressPercent(progressPercent);
-
-    console.log("🎯 터치 드래그 시작:", { progressPercent });
   };
 
   const handleProgressTouchMove = (e: React.TouchEvent) => {
@@ -142,8 +134,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
       e.touches[0].clientX
     );
     setTempProgressPercent(progressPercent);
-
-    console.log("🎯 터치 드래그 중:", { progressPercent });
   };
 
   const handleProgressTouchEnd = (e: React.TouchEvent) => {
@@ -167,8 +157,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
 
     setIsProgressDragging(false);
     setTempProgressPercent(0);
-
-    console.log("🎯 터치 드래그 종료:", { newTime, tempProgressPercent });
   };
 
   const handleProgressMouseUp = () => {
@@ -190,8 +178,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
 
     setIsProgressDragging(false);
     setTempProgressPercent(0);
-
-    console.log("🎯 드래그 종료:", { newTime });
   };
 
   // 오디오 이벤트 설정
@@ -224,6 +210,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
           try {
             handleNextSong();
           } catch (error) {
+            // 다음 곡 자동 재생 실패
             console.log("다음 곡 자동 재생 실패:", error);
           }
         }, 100);
@@ -266,6 +253,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
           await audio.play();
           setIsPlaying(true);
         } catch (error) {
+          // 자동 재생 실패
           console.log("자동 재생 실패:", error);
         }
       };
@@ -287,7 +275,8 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
         setIsPlaying(true);
       }
     } catch (error) {
-      console.error("재생 오류:", error);
+      // 재생 오류
+      console.log("재생 오류:", error);
     }
   };
 
@@ -355,18 +344,11 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
     const screenHeight = window.innerHeight;
     const hideZone = screenHeight * HIDE_ZONE_RATIO;
     const currentY = info.point.y - window.scrollY; // 뷰포트 기준 좌표로 변환
+    const showZone = hideZone - screenHeight * 0.15; // hideZone보다 위쪽에서부터 표시
 
-    console.log("🎵 드래그 중:", {
-      currentY,
-      hideZone,
-      screenHeight,
-      showHideZone,
-      scrollY: window.scrollY,
-    });
-
-    if (currentY > hideZone && !showHideZone) {
+    if (currentY > showZone && !showHideZone) {
       setShowHideZone(true);
-    } else if (currentY <= hideZone && showHideZone) {
+    } else if (currentY <= showZone && showHideZone) {
       setShowHideZone(false);
     }
   };
@@ -379,18 +361,9 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
     const hideZone = screenHeight * HIDE_ZONE_RATIO;
     const dropY = info.point.y - window.scrollY; // 뷰포트 기준 좌표로 변환
 
-    console.log("🎵 드래그 종료:", {
-      dropY,
-      hideZone,
-      screenHeight,
-      isHidden,
-      scrollY: window.scrollY,
-    });
-
     if (dropY > hideZone) {
       setIsHidden(true);
       setShowHideZone(false);
-      console.log("🎵 플레이어 숨김 처리 완료");
     }
   };
 
@@ -474,8 +447,8 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
             onDragStart={handleDragStart}
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.99 }}
           >
             <div className="flex flex-col gap-2">
               {/* 작은 상태 플레이어 */}
@@ -485,6 +458,18 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
                 className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200/50 p-4 min-w-[280px]"
               >
                 <div className="flex items-center justify-between gap-3">
+                  {/* 음소거 버튼 */}
+                  <button
+                    onClick={toggleMute}
+                    className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                    title={isMuted ? "음소거 해제" : "음소거"}
+                  >
+                    {isMuted ? (
+                      <VolumeX className="w-4 h-4 text-gray-600" />
+                    ) : (
+                      <Volume2 className="w-4 h-4 text-gray-600" />
+                    )}
+                  </button>
                   {/* 노래 정보 */}
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold text-gray-900 truncate font-gowun-dodum">
@@ -497,6 +482,18 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
                       {currentSongIndex + 1} / {totalSongs}
                     </div>
                   </div>
+
+                  {/* 재생 버튼 */}
+                  <button
+                    onClick={togglePlay}
+                    className="w-10 h-10 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 flex items-center justify-center text-white shadow-md transition-all duration-200 hover:scale-105"
+                  >
+                    {isPlaying ? (
+                      <Pause className="w-5 h-5" />
+                    ) : (
+                      <Play className="w-5 h-5 ml-0.5" />
+                    )}
+                  </button>
 
                   {/* 이전곡/다음곡 버튼 (작은 상태에서도 표시) */}
                   {totalSongs > 1 && (
@@ -517,31 +514,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
                       </button>
                     </div>
                   )}
-
-                  {/* 재생 버튼 */}
-                  <button
-                    onClick={togglePlay}
-                    className="w-10 h-10 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 flex items-center justify-center text-white shadow-md transition-all duration-200 hover:scale-105"
-                  >
-                    {isPlaying ? (
-                      <Pause className="w-5 h-5" />
-                    ) : (
-                      <Play className="w-5 h-5 ml-0.5" />
-                    )}
-                  </button>
-
-                  {/* 음소거 버튼 */}
-                  <button
-                    onClick={toggleMute}
-                    className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                    title={isMuted ? "음소거 해제" : "음소거"}
-                  >
-                    {isMuted ? (
-                      <VolumeX className="w-4 h-4 text-gray-600" />
-                    ) : (
-                      <Volume2 className="w-4 h-4 text-gray-600" />
-                    )}
-                  </button>
 
                   {/* 확장 버튼 */}
                   <button
@@ -598,6 +570,58 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
                         onTouchStart={() => setIsVolumeDragging(true)}
                         className="flex-1 slider accent-rose-500"
                       />
+                    </div>
+                  </div>
+
+                  {/* 플레이리스트 */}
+                  <div className="mt-4">
+                    <div className="text-sm font-medium text-gray-700 mb-2 font-gowun-dodum">
+                      플레이리스트
+                    </div>
+                    <div
+                      className="max-h-32 overflow-y-auto space-y-1"
+                      style={{ overscrollBehavior: "contain" }}
+                      onTouchStart={(e) => e.stopPropagation()}
+                      onMouseDown={(e) => e.stopPropagation()}
+                    >
+                      {backgroundMusic?.songs?.map((song, index) => (
+                        <button
+                          key={song.id}
+                          onClick={() => setCurrentSongIndex(index)}
+                          className={`w-full text-left p-2 rounded-lg transition-colors ${
+                            index === currentSongIndex
+                              ? "bg-gradient-to-r from-rose-100 to-pink-100 border border-rose-200"
+                              : "hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <div
+                                className={`text-sm truncate ${
+                                  index === currentSongIndex
+                                    ? "font-semibold text-rose-600"
+                                    : "text-gray-700"
+                                } font-gowun-dodum`}
+                              >
+                                {song.title}
+                              </div>
+                              <div className="text-xs text-gray-500 font-gowun-dodum">
+                                {song.artist}
+                              </div>
+                            </div>
+                            {index === currentSongIndex && (
+                              <div className="flex items-center gap-1">
+                                {isPlaying && (
+                                  <div className="w-1 h-1 bg-rose-500 rounded-full animate-pulse"></div>
+                                )}
+                                <span className="text-xs text-rose-500 font-medium">
+                                  재생 중
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </button>
+                      ))}
                     </div>
                   </div>
 
@@ -660,7 +684,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
                     </span>
                   </div>
                   <div className="text-center text-xs text-gray-400 mt-1">
-                    재생바를 클릭하거나 드래그하여 위치 조정
+                    플레이어를 아래로 드래그하면 숨길 수 있어요
                   </div>
                 </motion.div>
               )}
