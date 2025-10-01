@@ -81,8 +81,8 @@ export const sampleWeddingData: WeddingData = {
   },
   groomAccounts: [
     {
-      bank: "신한은행",
-      accountNumber: "110-000-0000000",
+      bank: "농협",
+      accountNumber: "352-0794-0534-53",
       accountHolder: "이태훈",
     },
     {
@@ -98,18 +98,18 @@ export const sampleWeddingData: WeddingData = {
   ],
   brideAccounts: [
     {
-      bank: "우리은행",
+      bank: "국민은행",
       accountNumber: "110-000-0000003",
       accountHolder: "정혜원",
     },
     {
-      bank: "우리은행",
-      accountNumber: "110-000-0000004",
+      bank: "국민은행",
+      accountNumber: "805501-01-058499",
       accountHolder: "정한목",
     },
     {
-      bank: "우리은행",
-      accountNumber: "110-000-0000005",
+      bank: "국민은행",
+      accountNumber: "864401-01-429762",
       accountHolder: "한해숙",
     },
   ],
