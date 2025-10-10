@@ -143,15 +143,6 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
                   onSlideChange={(swiper) => {
                     setCurrentIndex(swiper.realIndex);
                   }}
-                  // onAutoplayTimeLeft={(swiper, timeLeft, percentage) => {
-                  //   // 오토 플레이 진행 상황 로그
-                  //   console.log(
-                  //     "오토 플레이 남은 시간:",
-                  //     timeLeft,
-                  //     "퍼센트:",
-                  //     percentage
-                  //   );
-                  // }}
                   className="h-full w-full"
                   style={{ height: "100%", width: "100%" }}
                 >
@@ -323,10 +314,7 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
                 threshold={5}
                 resistance={true}
                 preventInteractionOnTransition={true}
-                onSwiper={(swiper) => {
-                  setLightboxSwiper(swiper);
-                  swiper.slideTo(currentIndex);
-                }}
+                onSwiper={setLightboxSwiper}
                 onSlideChange={(swiper) => {
                   setCurrentIndex(swiper.realIndex);
                   mainSwiper?.slideTo(swiper.realIndex);
