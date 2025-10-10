@@ -36,22 +36,28 @@ export const sampleWeddingData: WeddingData = {
   gallery: [
     {
       id: "1",
+      // 옵션 1: public 폴더 사용 (기본)
       url: "/images/gallery/photo1.jpg",
+      // 옵션 2: Supabase Storage 사용 (아래 주석 해제하고 프로젝트 URL 변경)
+      // url: "https://{프로젝트ID}.supabase.co/storage/v1/object/public/wedding-gallery/photo1.jpg",
       alt: "웨딩 사진 1",
     },
     {
       id: "2",
       url: "/images/gallery/photo2.jpg",
+      // url: "https://{프로젝트ID}.supabase.co/storage/v1/object/public/wedding-gallery/photo2.jpg",
       alt: "웨딩 사진 2",
     },
     {
       id: "3",
       url: "/images/gallery/photo3.jpg",
+      // url: "https://{프로젝트ID}.supabase.co/storage/v1/object/public/wedding-gallery/photo3.jpg",
       alt: "웨딩 사진 3",
     },
     {
       id: "4",
       url: "/images/gallery/photo4.jpg",
+      // url: "https://{프로젝트ID}.supabase.co/storage/v1/object/public/wedding-gallery/photo4.jpg",
       alt: "웨딩 사진 4",
     },
   ],

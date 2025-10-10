@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { CeremonyInfo } from "@/types";
 import { NavigationButtons } from "../ui/NavigationButtons";
 import { SectionHeader } from "../ui/SectionHeader";
@@ -8,26 +9,132 @@ interface LocationSectionProps {
   ceremony: CeremonyInfo;
 }
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 export const LocationSection = ({ ceremony }: LocationSectionProps) => {
+  const mapContainer = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // 카카오 맵 로드
+    const loadKakaoMap = () => {
+      console.log("카카오맵 로드 시작");
+      if (window.kakao && window.kakao.maps) {
+        console.log("카카오맵 객체 확인됨");
+        // autoload=false이므로 load() 메서드 호출 필요
+        window.kakao.maps.load(() => {
+          console.log("카카오맵 load() 완료");
+          if (mapContainer.current) {
+            try {
+              // 주소로 좌표를 검색
+              const geocoder = new window.kakao.maps.services.Geocoder();
+
+              geocoder.addressSearch(
+                ceremony.address,
+                (result: any, status: any) => {
+                  if (status === window.kakao.maps.services.Status.OK) {
+                    const coords = new window.kakao.maps.LatLng(
+                      result[0].y,
+                      result[0].x
+                    );
+
+                    console.log(
+                      "주소 검색 결과 좌표:",
+                      result[0].y,
+                      result[0].x
+                    );
+
+                    const mapOption = {
+                      center: coords,
+                      level: 3,
+                    };
+
+                    const map = new window.kakao.maps.Map(
+                      mapContainer.current,
+                      mapOption
+                    );
+
+                    // 마커 생성
+                    const marker = new window.kakao.maps.Marker({
+                      map: map,
+                      position: coords,
+                    });
+
+                    // 인포윈도우 생성
+                    const infowindow = new window.kakao.maps.InfoWindow({
+                      content: `<div style="padding:10px;font-size:12px;text-align:center;"><strong>${ceremony.venue}</strong><br/>${ceremony.address}</div>`,
+                    });
+                    infowindow.open(map, marker);
+                    console.log("지도 렌더링 완료");
+                  } else {
+                    console.error("주소 검색 실패:", status);
+                    // 주소 검색 실패 시 기본 좌표 사용
+                    const defaultCoords = new window.kakao.maps.LatLng(
+                      35.8889,
+                      128.6645
+                    );
+                    const mapOption = {
+                      center: defaultCoords,
+                      level: 3,
+                    };
+                    const map = new window.kakao.maps.Map(
+                      mapContainer.current,
+                      mapOption
+                    );
+                    const marker = new window.kakao.maps.Marker({
+                      map: map,
+                      position: defaultCoords,
+                    });
+                  }
+                }
+              );
+            } catch (error) {
+              console.error("지도 생성 오류:", error);
+            }
+          } else {
+            console.error("mapContainer.current가 없음");
+          }
+        });
+      } else {
+        console.error("window.kakao.maps가 없음", window.kakao);
+      }
+    };
+
+    // 스크립트가 로드될 때까지 대기
+    const timer = setTimeout(() => {
+      if (window.kakao && window.kakao.maps) {
+        loadKakaoMap();
+      } else {
+        console.log("카카오맵 스크립트 로드 대기 중...");
+        const checkKakaoMap = setInterval(() => {
+          if (window.kakao && window.kakao.maps) {
+            console.log("카카오맵 스크립트 로드됨");
+            clearInterval(checkKakaoMap);
+            loadKakaoMap();
+          }
+        }, 100);
+
+        return () => clearInterval(checkKakaoMap);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [ceremony]);
+
   return (
     <section className="py-16 px-6 bg-white">
       <div className="max-w-2xl mx-auto">
         <SectionHeader englishTitle="LOCATION" koreanTitle="오시는 길" />
 
-        {/* 지도 */}
+        {/* 카카오 지도 */}
         <div className="mb-8">
-          <iframe
-            src={`https://www.google.com/maps?q=${encodeURIComponent(
-              ceremony.address
-            )}&output=embed`}
-            width="100%"
-            height="400"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="rounded-lg shadow-lg"
-          ></iframe>
+          <div
+            ref={mapContainer}
+            className="w-full h-[400px] rounded-lg shadow-lg"
+          />
         </div>
 
         {/* 예식장 정보 */}
