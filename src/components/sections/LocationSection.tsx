@@ -104,8 +104,8 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
                   console.error("주소 검색 실패:", status);
                   // 주소 검색 실패 시 기본 좌표 사용
                   const defaultCoords = new window.kakao.maps.LatLng(
-                    35.8889,
-                    128.6645
+                    35.8824102975974,
+                    128.662109053984
                   );
                   const mapOption = {
                     center: defaultCoords,
