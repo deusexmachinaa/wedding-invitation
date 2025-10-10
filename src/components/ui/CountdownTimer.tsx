@@ -271,7 +271,7 @@ export const CountdownTimer = ({
               {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
                 <div
                   key={day}
-                  className="text-center text-sm font-semibold text-gray-500 py-2"
+                  className="w-10 text-center text-sm font-semibold text-gray-500 py-2"
                   style={{
                     fontFamily:
                       "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
