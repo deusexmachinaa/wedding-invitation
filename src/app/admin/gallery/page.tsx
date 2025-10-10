@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { uploadImage } from "@/lib/gallery";
 
 export default function GalleryAdminPage() {
@@ -222,12 +223,12 @@ export default function GalleryAdminPage() {
 
         {/* 홈으로 돌아가기 */}
         <div className="mt-6 text-center">
-          <a
+          <Link
             href="/"
             className="inline-block text-rose-600 hover:text-rose-700 font-medium transition-colors"
           >
             ← 청첩장으로 돌아가기
-          </a>
+          </Link>
         </div>
       </div>
     </div>
