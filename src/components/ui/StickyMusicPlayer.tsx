@@ -9,7 +9,6 @@ import {
   VolumeX,
   ChevronUp,
   ChevronDown,
-  SkipBack,
   SkipForward,
   X,
 } from "lucide-react";
@@ -294,26 +293,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
     }
   };
 
-  // 이전 곡
-  const handlePreviousSong = () => {
-    if (totalSongs <= 1) return;
-
-    const newIndex =
-      currentSongIndex > 0 ? currentSongIndex - 1 : totalSongs - 1;
-    setCurrentSongIndex(newIndex);
-    setCurrentTime(0);
-
-    // 재생 중이었다면 새 곡도 자동 재생
-    if (isPlaying) {
-      setTimeout(() => {
-        const audio = audioRef.current;
-        if (audio) {
-          audio.play().catch(console.error);
-        }
-      }, 100);
-    }
-  };
-
   // 다음 곡
   const handleNextSong = useCallback(() => {
     if (totalSongs <= 1) return;
@@ -495,24 +474,15 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
                     )}
                   </button>
 
-                  {/* 이전곡/다음곡 버튼 (작은 상태에서도 표시) */}
+                  {/* 다음곡 버튼 */}
                   {totalSongs > 1 && (
-                    <div className="flex items-center gap-1">
-                      {/* <button
-                        onClick={handlePreviousSong}
-                        className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                        title="이전 곡"
-                      >
-                        <SkipBack className="w-3 h-3 text-gray-600" />
-                      </button> */}
-                      <button
-                        onClick={handleNextSong}
-                        className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                        title="다음 곡"
-                      >
-                        <SkipForward className="w-3 h-3 text-gray-600" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={handleNextSong}
+                      className="w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                      title="다음 곡"
+                    >
+                      <SkipForward className="w-3 h-3 text-gray-600" />
+                    </button>
                   )}
 
                   {/* 확장 버튼 */}

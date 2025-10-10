@@ -4,7 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { PersonInfo, CeremonyInfo } from "@/types";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 
 interface HeaderSectionProps {
   groom: PersonInfo;

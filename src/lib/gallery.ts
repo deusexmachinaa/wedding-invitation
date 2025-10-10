@@ -114,7 +114,7 @@ export async function getGalleryImagesFromDB(): Promise<Image[]> {
       url: getPublicImageUrl(item.storage_path),
       alt: item.alt || "웨딩 사진",
     }));
-  } catch (error) {
+  } catch {
     // DB 연결 실패나 테이블이 없는 경우 조용히 무시
     return [];
   }
@@ -211,7 +211,7 @@ export async function uploadImage(
       : finalFilename;
 
     // 1. Storage에 파일 업로드
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from(GALLERY_BUCKET)
       .upload(fullPath, finalFile, {
         cacheControl: "3600",

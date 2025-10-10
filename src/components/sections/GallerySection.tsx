@@ -15,7 +15,6 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set([0]));
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // 드래그/스와이프 관련 상태
@@ -39,8 +38,12 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
 
   // 이미지 미리 로드
   useEffect(() => {
-    setLoadedImages((prev) => new Set([...prev, ...imagesToPreload]));
-  }, [imagesToPreload]);
+    // 주변 이미지 미리 로드
+    imagesToPreload.forEach((index) => {
+      const img = new Image();
+      img.src = images[index]?.url;
+    });
+  }, [imagesToPreload, images]);
 
   // 라이트박스 이미지 미리 로드
   useEffect(() => {

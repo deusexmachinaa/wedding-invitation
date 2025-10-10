@@ -9,9 +9,46 @@ interface LocationSectionProps {
   ceremony: CeremonyInfo;
 }
 
+interface KakaoGeocoder {
+  addressSearch: (
+    address: string,
+    callback: (result: Array<{ x: string; y: string }>, status: string) => void
+  ) => void;
+}
+
+type KakaoLatLngConstructor = new (lat: number, lng: number) => unknown;
+type KakaoMapConstructor = new (
+  container: HTMLElement,
+  options: { center: unknown; level: number }
+) => unknown;
+type KakaoMarkerConstructor = new (options: {
+  map: unknown;
+  position: unknown;
+}) => unknown;
+type KakaoInfoWindowConstructor = new (options: { content: string }) => {
+  open: (map: unknown, marker: unknown) => void;
+};
+type KakaoGeocoderConstructor = new () => KakaoGeocoder;
+
+interface KakaoMaps {
+  load: (callback: () => void) => void;
+  services: {
+    Geocoder: KakaoGeocoderConstructor;
+    Status: {
+      OK: string;
+    };
+  };
+  LatLng: KakaoLatLngConstructor;
+  Map: KakaoMapConstructor;
+  Marker: KakaoMarkerConstructor;
+  InfoWindow: KakaoInfoWindowConstructor;
+}
+
 declare global {
   interface Window {
-    kakao: any;
+    kakao: {
+      maps: KakaoMaps;
+    };
   }
 }
 
@@ -32,65 +69,58 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
               // 주소로 좌표를 검색
               const geocoder = new window.kakao.maps.services.Geocoder();
 
-              geocoder.addressSearch(
-                ceremony.address,
-                (result: any, status: any) => {
-                  if (status === window.kakao.maps.services.Status.OK) {
-                    const coords = new window.kakao.maps.LatLng(
-                      result[0].y,
-                      result[0].x
-                    );
+              geocoder.addressSearch(ceremony.address, (result, status) => {
+                if (status === window.kakao.maps.services.Status.OK) {
+                  const coords = new window.kakao.maps.LatLng(
+                    parseFloat(result[0].y),
+                    parseFloat(result[0].x)
+                  );
 
-                    console.log(
-                      "주소 검색 결과 좌표:",
-                      result[0].y,
-                      result[0].x
-                    );
+                  console.log("주소 검색 결과 좌표:", result[0].y, result[0].x);
 
-                    const mapOption = {
-                      center: coords,
-                      level: 3,
-                    };
+                  const mapOption = {
+                    center: coords,
+                    level: 3,
+                  };
 
-                    const map = new window.kakao.maps.Map(
-                      mapContainer.current,
-                      mapOption
-                    );
+                  const map = new window.kakao.maps.Map(
+                    mapContainer.current!,
+                    mapOption
+                  );
 
-                    // 마커 생성
-                    const marker = new window.kakao.maps.Marker({
-                      map: map,
-                      position: coords,
-                    });
+                  // 마커 생성
+                  const marker = new window.kakao.maps.Marker({
+                    map: map,
+                    position: coords,
+                  });
 
-                    // 인포윈도우 생성
-                    const infowindow = new window.kakao.maps.InfoWindow({
-                      content: `<div style="padding:10px;font-size:12px;text-align:center;"><strong>${ceremony.venue}</strong><br/>${ceremony.address}</div>`,
-                    });
-                    infowindow.open(map, marker);
-                    console.log("지도 렌더링 완료");
-                  } else {
-                    console.error("주소 검색 실패:", status);
-                    // 주소 검색 실패 시 기본 좌표 사용
-                    const defaultCoords = new window.kakao.maps.LatLng(
-                      35.8889,
-                      128.6645
-                    );
-                    const mapOption = {
-                      center: defaultCoords,
-                      level: 3,
-                    };
-                    const map = new window.kakao.maps.Map(
-                      mapContainer.current,
-                      mapOption
-                    );
-                    const marker = new window.kakao.maps.Marker({
-                      map: map,
-                      position: defaultCoords,
-                    });
-                  }
+                  // 인포윈도우 생성
+                  const infowindow = new window.kakao.maps.InfoWindow({
+                    content: `<div style="padding:10px;font-size:12px;text-align:center;"><strong>${ceremony.venue}</strong><br/>${ceremony.address}</div>`,
+                  });
+                  infowindow.open(map, marker);
+                  console.log("지도 렌더링 완료");
+                } else {
+                  console.error("주소 검색 실패:", status);
+                  // 주소 검색 실패 시 기본 좌표 사용
+                  const defaultCoords = new window.kakao.maps.LatLng(
+                    35.8889,
+                    128.6645
+                  );
+                  const mapOption = {
+                    center: defaultCoords,
+                    level: 3,
+                  };
+                  const map = new window.kakao.maps.Map(
+                    mapContainer.current!,
+                    mapOption
+                  );
+                  new window.kakao.maps.Marker({
+                    map: map,
+                    position: defaultCoords,
+                  });
                 }
-              );
+              });
             } catch (error) {
               console.error("지도 생성 오류:", error);
             }

@@ -13,7 +13,7 @@ export default async function Home() {
       galleryImages = imagesFromSupabase;
     }
     // Storage와 DB 둘 다 비어있으면 sampleData 사용 (정상 동작)
-  } catch (error) {
+  } catch {
     // Supabase 연결 실패 시 sampleData 사용 (정상 동작)
   }
 
