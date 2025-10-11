@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X, Play, Pause } from "lucide-react";
 import type { Image } from "@/types";
 import { SectionHeader } from "../ui/SectionHeader";
@@ -21,10 +21,12 @@ interface GallerySectionProps {
 export const GallerySection = ({ images }: GallerySectionProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [isAutoPlay, setIsAutoPlay] = useState(false); // 초기값 false로 변경
   const [mainSwiper, setMainSwiper] = useState<SwiperType | null>(null);
   const [lightboxSwiper, setLightboxSwiper] = useState<SwiperType | null>(null);
   const [showLightboxControls, setShowLightboxControls] = useState(true);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const hasStartedAutoPlay = useRef(false); // 자동재생 시작 여부 추적
 
   const openLightbox = (index: number) => {
     setCurrentIndex(index);
@@ -59,13 +61,48 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
 
   const closeLightbox = () => {
     setIsLightboxOpen(false);
-    setIsAutoPlay(true);
+    // 자동재생이 이미 시작된 적이 있으면 true로 설정
+    if (hasStartedAutoPlay.current) {
+      setIsAutoPlay(true);
+    }
 
     // 메인 슬라이더 자동재생 재개
-    if (mainSwiper?.autoplay && isAutoPlay) {
+    if (mainSwiper?.autoplay && hasStartedAutoPlay.current) {
       mainSwiper.autoplay.start();
     }
   };
+
+  // Intersection Observer로 갤러리가 화면에 보일 때 자동재생 시작
+  useEffect(() => {
+    if (!sectionRef.current || hasStartedAutoPlay.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // 갤러리 섹션이 50% 이상 보이면 자동재생 시작
+          if (entry.isIntersecting && !hasStartedAutoPlay.current) {
+            hasStartedAutoPlay.current = true;
+            setIsAutoPlay(true);
+
+            // Swiper가 준비되면 자동재생 시작
+            if (mainSwiper?.autoplay) {
+              mainSwiper.autoplay.start();
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.3, // 30% 이상 보이면 트리거
+        rootMargin: "0px",
+      }
+    );
+
+    observer.observe(sectionRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [mainSwiper]);
 
   const toggleAutoPlay = () => {
     if (mainSwiper?.autoplay) {
@@ -93,7 +130,10 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
 
   return (
     <>
-      <section className="py-16 px-6 bg-gradient-to-b from-white to-rose-50">
+      <section
+        ref={sectionRef}
+        className="py-16 px-6 bg-gradient-to-b from-white to-rose-50"
+      >
         <div className="max-w-4xl mx-auto">
           <SectionHeader englishTitle="GALLERY" koreanTitle="우리의 순간" />
 
