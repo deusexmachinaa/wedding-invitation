@@ -2,6 +2,7 @@
 
 import { AccountInfo } from "@/types";
 import { SectionHeader } from "../ui/SectionHeader";
+import { useState } from "react";
 
 interface AccountSectionProps {
   groomAccounts: AccountInfo[];
@@ -14,6 +15,22 @@ export const AccountSection = ({
   groomAccounts,
   brideAccounts,
 }: AccountSectionProps) => {
+  const [copiedIndex, setCopiedIndex] = useState<string | null>(null);
+
+  const handleCopyAccount = async (
+    accountNumber: string,
+    index: number,
+    type: "groom" | "bride"
+  ) => {
+    try {
+      await navigator.clipboard.writeText(accountNumber);
+      const key = `${type}-${index}`;
+      setCopiedIndex(key);
+      setTimeout(() => setCopiedIndex(null), 1000);
+    } catch (err) {
+      console.error("복사 실패:", err);
+    }
+  };
   return (
     <section className="py-16 px-6 bg-rose-50">
       <div className="max-w-2xl mx-auto">
@@ -26,23 +43,43 @@ export const AccountSection = ({
               신랑측 계좌번호
             </h3>
             <div className="space-y-3">
-              {groomAccounts.map((account, index) => (
-                <div key={index} className="bg-white p-4 rounded-lg shadow-sm">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-medium text-gray-800">
-                        {account.accountHolder}
+              {groomAccounts.map((account, index) => {
+                const key = `groom-${index}`;
+                const isCopied = copiedIndex === key;
+                return (
+                  <div
+                    key={index}
+                    className="bg-white p-4 rounded-lg shadow-sm"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <div className="font-medium text-gray-800">
+                          {account.accountHolder}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {account.bank} {account.accountNumber}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-600">
-                        {account.bank} {account.accountNumber}
-                      </div>
+                      <button
+                        onClick={() =>
+                          handleCopyAccount(
+                            account.accountNumber,
+                            index,
+                            "groom"
+                          )
+                        }
+                        className={`px-3 py-1 rounded text-sm transition-colors ${
+                          isCopied
+                            ? "bg-green-100 text-green-600"
+                            : "bg-rose-100 text-rose-600 hover:bg-rose-200"
+                        }`}
+                      >
+                        {isCopied ? "복사완료" : "복사"}
+                      </button>
                     </div>
-                    <button className="px-3 py-1 bg-rose-100 text-rose-600 rounded text-sm">
-                      복사
-                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -52,23 +89,43 @@ export const AccountSection = ({
               신부측 계좌번호
             </h3>
             <div className="space-y-3">
-              {brideAccounts.map((account, index) => (
-                <div key={index} className="bg-white p-4 rounded-lg shadow-sm">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="font-medium text-gray-800">
-                        {account.accountHolder}
+              {brideAccounts.map((account, index) => {
+                const key = `bride-${index}`;
+                const isCopied = copiedIndex === key;
+                return (
+                  <div
+                    key={index}
+                    className="bg-white p-4 rounded-lg shadow-sm"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <div className="font-medium text-gray-800">
+                          {account.accountHolder}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {account.bank} {account.accountNumber}
+                        </div>
                       </div>
-                      <div className="text-sm text-gray-600">
-                        {account.bank} {account.accountNumber}
-                      </div>
+                      <button
+                        onClick={() =>
+                          handleCopyAccount(
+                            account.accountNumber,
+                            index,
+                            "bride"
+                          )
+                        }
+                        className={`px-3 py-1 rounded text-sm transition-colors ${
+                          isCopied
+                            ? "bg-green-100 text-green-600"
+                            : "bg-rose-100 text-rose-600 hover:bg-rose-200"
+                        }`}
+                      >
+                        {isCopied ? "복사완료" : "복사"}
+                      </button>
                     </div>
-                    <button className="px-3 py-1 bg-rose-100 text-rose-600 rounded text-sm">
-                      복사
-                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
