@@ -248,7 +248,7 @@ export const GuestbookSection = () => {
         </form>
 
         {/* Guestbook Entries */}
-        <div className="space-y-4">
+        <div className="max-h-[600px] overflow-y-auto space-y-4 pr-2">
           {isLoading ? (
             <div className="text-center py-8 text-gray-500">불러오는 중...</div>
           ) : entries.length === 0 ? (
