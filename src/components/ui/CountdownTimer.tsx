@@ -39,6 +39,7 @@ interface TimeRemaining {
   minutes: number;
   seconds: number;
   isExpired: boolean;
+  daysPassed?: number;
 }
 
 export const CountdownTimer = ({
@@ -72,12 +73,17 @@ export const CountdownTimer = ({
     const difference = targetTime - now;
 
     if (difference <= 0) {
+      // 날짜가 지난 경우 경과한 일수 계산
+      const daysPassed = Math.floor(
+        Math.abs(difference) / (1000 * 60 * 60 * 24)
+      );
       return {
         days: 0,
         hours: 0,
         minutes: 0,
         seconds: 0,
         isExpired: true,
+        daysPassed: daysPassed,
       };
     }
 
@@ -137,6 +143,8 @@ export const CountdownTimer = ({
   ];
 
   if (timeRemaining.isExpired) {
+    const daysPassed = timeRemaining.daysPassed || 0;
+
     return (
       <section className="py-16 px-6 bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
         <div className="max-w-4xl mx-auto text-center">
@@ -153,7 +161,14 @@ export const CountdownTimer = ({
                   "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
               }}
             >
-              🎉 결혼식 당일입니다! 🎉
+              {daysPassed === 0 ? (
+                <>🎉 결혼식 당일입니다! 🎉</>
+              ) : (
+                <>
+                  결혼식이 <span className="text-pink-500">{daysPassed}</span>일
+                  지났습니다 💕
+                </>
+              )}
             </h2>
             <p
               className="text-lg text-gray-600"
@@ -162,7 +177,10 @@ export const CountdownTimer = ({
                   "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
               }}
             >
-              {groomName} ♥ {brideName}의 행복한 시작을 축하해주세요!
+              {groomName} ♥ {brideName}
+              {daysPassed === 0
+                ? "의 행복한 시작을 축하해주세요!"
+                : "의 행복한 결혼 생활을 응원해주세요!"}
             </p>
           </motion.div>
         </div>
