@@ -66,6 +66,14 @@ export interface BackgroundMusic {
   currentSongIndex?: number;
 }
 
+export interface PhotoBoothExample {
+  id: string;
+  style: string;
+  emoji: string;
+  description: string;
+  imageUrl: string;
+}
+
 export interface WeddingData {
   // 기본 정보
   groom: PersonInfo;
@@ -91,6 +99,7 @@ export interface WeddingData {
     secondary: string;
     accent: string;
   };
+  photoBoothExamples?: PhotoBoothExample[];
 }
 
 // 컴포넌트 Props 타입들

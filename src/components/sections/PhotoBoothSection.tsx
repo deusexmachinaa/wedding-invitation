@@ -2,8 +2,12 @@
 
 import { Camera, Heart, Star } from "lucide-react";
 import { SectionHeader } from "../ui/SectionHeader";
+import { sampleWeddingData } from "@/data/sampleData";
+import Image from "next/image";
 
 export const PhotoBoothSection = () => {
+  const photoBoothExamples = sampleWeddingData.photoBoothExamples || [];
+
   return (
     <section className="py-16 px-6 bg-gradient-to-br from-pink-50 to-rose-50">
       <div className="max-w-2xl mx-auto text-center">
@@ -74,28 +78,33 @@ export const PhotoBoothSection = () => {
 
             {/* 포토 스타일 안내 */}
             <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg p-6 mt-6">
-              <div className="flex items-center justify-center mb-3">
+              <div className="flex items-center justify-center mb-6">
                 <Star className="w-5 h-5 text-yellow-500 mr-2" />
                 <h4 className="font-medium text-gray-800">포토 스타일 제안</h4>
                 <Star className="w-5 h-5 text-yellow-500 ml-2" />
               </div>
               <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                <div className="text-center">
-                  <span className="font-medium">📸 자유롭게</span>
-                  <p>원하는 포즈로 촬영하세요</p>
-                </div>
-                <div className="text-center">
-                  <span className="font-medium">💕 함께</span>
-                  <p>동반자와 함께 찍어보세요</p>
-                </div>
-                <div className="text-center">
-                  <span className="font-medium">🎭 재미있게</span>
-                  <p>소품을 활용해보세요</p>
-                </div>
-                <div className="text-center">
-                  <span className="font-medium">✨ 자연스럽게</span>
-                  <p>진솔한 미소를 보여주세요</p>
-                </div>
+                {photoBoothExamples.map((example) => (
+                  <div key={example.id} className="text-center">
+                    {/* 예시 이미지 */}
+                    <div className="relative w-full aspect-square mb-3 rounded-lg overflow-hidden shadow-md">
+                      <Image
+                        src={example.imageUrl}
+                        alt={`${example.style} 스타일 예시`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                      />
+                    </div>
+                    {/* 스타일 설명 */}
+                    <div className="bg-white rounded-lg p-1 mb-2">
+                      <span className="font-medium text-base">
+                        {example.emoji} {example.style}
+                      </span>
+                      <p className="mt-1 text-xs">{example.description}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 

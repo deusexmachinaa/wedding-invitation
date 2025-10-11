@@ -92,7 +92,7 @@ export const sampleWeddingData: WeddingData = {
       accountHolder: "이태훈",
     },
     {
-      bank: "iM뱅크(구 대구은행)",
+      bank: "iM뱅크",
       accountNumber: "010-52-944221",
       accountHolder: "이재교",
     },
@@ -128,4 +128,34 @@ export const sampleWeddingData: WeddingData = {
     secondary: "#F5F5DC",
     accent: "#CD853F",
   },
+  photoBoothExamples: [
+    {
+      id: "1",
+      style: "자유롭게",
+      emoji: "📸",
+      description: "원하는 포즈로 촬영하세요",
+      imageUrl: "/images/photobooth/style1.jpg",
+    },
+    {
+      id: "2",
+      style: "함께",
+      emoji: "💕",
+      description: "동반자와 함께 찍어보세요",
+      imageUrl: "/images/photobooth/style2.jpg",
+    },
+    {
+      id: "3",
+      style: "재미있게",
+      emoji: "🎭",
+      description: "소품을 활용해보세요",
+      imageUrl: "/images/photobooth/style3.jpg",
+    },
+    {
+      id: "4",
+      style: "자연스럽게",
+      emoji: "✨",
+      description: "진솔한 미소를 보여주세요",
+      imageUrl: "/images/photobooth/style4.jpg",
+    },
+  ],
 };
