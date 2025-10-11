@@ -269,7 +269,12 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
                   본관 지상 및 지하주차장 600여대 주차 가능
                   <br />
                   <span className="text-xs text-gray-500">
-                    (교통 혼잡이 예상되오니 대중교통 이용을 권장드립니다)
+                    홈플러스 주차장은 홈플러스 폐점으로 인해 사용 불가합니다
+                  </span>
+                  <br />
+                  <span className="text-xs text-gray-500">
+                    외부 주차 가능 공간은 예식 당일 안내 요원이 실시간으로 확인
+                    예정입니다.
                   </span>
                 </p>
               </div>
