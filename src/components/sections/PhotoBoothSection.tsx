@@ -111,7 +111,7 @@ export const PhotoBoothSection = () => {
             {/* 운영 시간 */}
             <div className="text-center mt-6 p-4 bg-gray-50 rounded-lg">
               <p className="text-sm text-gray-600">
-                <strong>운영시간:</strong> 예식 시작 30분 전 ~ 예식 종료 후 30분
+                <strong>운영시간:</strong> 예식 시작 전후 30분
                 <br />
                 <strong>위치:</strong> 웨딩홀 입구 로비
               </p>
