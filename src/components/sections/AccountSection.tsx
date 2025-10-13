@@ -18,12 +18,13 @@ export const AccountSection = ({
   const [copiedIndex, setCopiedIndex] = useState<string | null>(null);
 
   const handleCopyAccount = async (
+    bank: string,
     accountNumber: string,
     index: number,
     type: "groom" | "bride"
   ) => {
     try {
-      await navigator.clipboard.writeText(accountNumber);
+      await navigator.clipboard.writeText(`${bank} ${accountNumber}`);
       const key = `${type}-${index}`;
       setCopiedIndex(key);
       setTimeout(() => setCopiedIndex(null), 1000);
@@ -63,6 +64,7 @@ export const AccountSection = ({
                       <button
                         onClick={() =>
                           handleCopyAccount(
+                            account.bank,
                             account.accountNumber,
                             index,
                             "groom"
@@ -109,6 +111,7 @@ export const AccountSection = ({
                       <button
                         onClick={() =>
                           handleCopyAccount(
+                            account.bank,
                             account.accountNumber,
                             index,
                             "bride"
