@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CeremonyInfo } from "@/types";
 import { NavigationButtons } from "../ui/NavigationButtons";
 import { SectionHeader } from "../ui/SectionHeader";
@@ -17,10 +17,14 @@ interface KakaoGeocoder {
 }
 
 type KakaoLatLngConstructor = new (lat: number, lng: number) => unknown;
+type KakaoMap = {
+  setDraggable: (draggable: boolean) => void;
+  setZoomable: (zoomable: boolean) => void;
+};
 type KakaoMapConstructor = new (
   container: HTMLElement,
   options: { center: unknown; level: number }
-) => unknown;
+) => KakaoMap;
 type KakaoMarkerConstructor = new (options: {
   map: unknown;
   position: unknown;
@@ -54,6 +58,7 @@ declare global {
 
 export const LocationSection = ({ ceremony }: LocationSectionProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
+  const [isMapActive, setIsMapActive] = useState(false);
 
   useEffect(() => {
     // 카카오 맵 로드
@@ -88,6 +93,24 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
                     mapOption
                   );
 
+                  // 초기에는 드래그와 줌 비활성화
+                  map.setDraggable(false);
+                  map.setZoomable(false);
+
+                  // 지도 컨테이너 클릭 시 활성화
+                  const handleMapClick = () => {
+                    map.setDraggable(true);
+                    map.setZoomable(true);
+                    setIsMapActive(true);
+                  };
+
+                  if (mapContainer.current) {
+                    mapContainer.current.addEventListener(
+                      "click",
+                      handleMapClick
+                    );
+                  }
+
                   // 마커 생성
                   const marker = new window.kakao.maps.Marker({
                     map: map,
@@ -115,6 +138,25 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
                     mapContainer.current!,
                     mapOption
                   );
+
+                  // 초기에는 드래그와 줌 비활성화
+                  map.setDraggable(false);
+                  map.setZoomable(false);
+
+                  // 지도 컨테이너 클릭 시 활성화
+                  const handleMapClick = () => {
+                    map.setDraggable(true);
+                    map.setZoomable(true);
+                    setIsMapActive(true);
+                  };
+
+                  if (mapContainer.current) {
+                    mapContainer.current.addEventListener(
+                      "click",
+                      handleMapClick
+                    );
+                  }
+
                   new window.kakao.maps.Marker({
                     map: map,
                     position: defaultCoords,
@@ -160,11 +202,21 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
         <SectionHeader englishTitle="LOCATION" koreanTitle="오시는 길" />
 
         {/* 카카오 지도 */}
-        <div className="mb-8">
+        <div className="mb-8 relative">
           <div
             ref={mapContainer}
             className="w-full h-[400px] rounded-lg shadow-lg"
           />
+          {/* 지도 활성화 안내 오버레이 */}
+          {!isMapActive && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-lg pointer-events-none">
+              <div className="bg-white/95 px-6 py-3 rounded-lg shadow-lg">
+                <p className="text-sm text-gray-700 font-medium">
+                  📍 지도를 터치하면 드래그할 수 있습니다
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 예식장 정보 */}
