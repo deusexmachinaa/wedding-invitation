@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CeremonyInfo } from "@/types";
 import { NavigationButtons } from "../ui/NavigationButtons";
 import { SectionHeader } from "../ui/SectionHeader";
@@ -71,6 +71,7 @@ declare global {
 
 export const LocationSection = ({ ceremony }: LocationSectionProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
+  const [isMapActive, setIsMapActive] = useState(false);
 
   useEffect(() => {
     // 네이버 지도 로드
@@ -89,11 +90,11 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
             const mapOption = {
               center: position,
               zoom: 16,
-              draggable: true,
-              scrollWheel: true,
-              disableDoubleClickZoom: false,
-              disableDoubleTapZoom: false,
-              disableTwoFingerTapZoom: false,
+              draggable: false,
+              scrollWheel: false,
+              disableDoubleClickZoom: true,
+              disableDoubleTapZoom: true,
+              disableTwoFingerTapZoom: true,
               // 확대/축소 컨트롤 표시
               zoomControl: true,
               zoomControlOptions: {
@@ -110,6 +111,22 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
               mapContainer.current,
               mapOption
             );
+
+            // 지도 컨테이너 클릭 시 활성화
+            const handleMapClick = () => {
+              map.setOptions({
+                draggable: true,
+                scrollWheel: true,
+                disableDoubleClickZoom: false,
+                disableDoubleTapZoom: false,
+                disableTwoFingerTapZoom: false,
+              });
+              setIsMapActive(true);
+            };
+
+            if (mapContainer.current) {
+              mapContainer.current.addEventListener("click", handleMapClick);
+            }
 
             // 마커 생성
             const marker = new window.naver.maps.Marker({
@@ -162,11 +179,21 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
         <SectionHeader englishTitle="LOCATION" koreanTitle="오시는 길" />
 
         {/* 네이버 지도 */}
-        <div className="mb-8">
+        <div className="mb-8 relative">
           <div
             ref={mapContainer}
             className="w-full h-[400px] rounded-lg shadow-lg"
           />
+          {/* 지도 활성화 안내 오버레이 */}
+          {!isMapActive && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-lg pointer-events-none">
+              <div className="bg-white/95 px-6 py-3 rounded-lg shadow-lg">
+                <p className="text-sm text-gray-700 font-medium">
+                  지도를 터치하면 이동할 수 있습니다
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 예식장 정보 */}
