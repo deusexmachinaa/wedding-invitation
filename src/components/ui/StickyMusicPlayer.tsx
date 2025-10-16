@@ -44,6 +44,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
   const [isVolumeDragging, setIsVolumeDragging] = useState(false);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [showDragHint, setShowDragHint] = useState(true);
 
   // 🎯 간단한 진행바 상태
   const [isProgressDragging, setIsProgressDragging] = useState(false);
@@ -342,9 +343,18 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
     }
   }, [totalSongs, currentSongIndex, isPlaying]);
 
+  // 드래그 힌트 자동 숨김 (3초 후)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowDragHint(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   // 드래그 시작
   const handleDragStart = () => {
     setIsDragging(true);
+    setShowDragHint(false); // 드래그 시작하면 힌트 숨김
   };
 
   // 드래그 중
@@ -459,6 +469,21 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
             whileTap={{ scale: 0.99 }}
           >
             <div className="flex flex-col gap-2">
+              {/* 드래그 힌트 */}
+              <AnimatePresence>
+                {showDragHint && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs px-3 py-2 rounded-lg shadow-lg text-center font-medium"
+                  >
+                    플레이어를 드래그하여 이동할 수 있어요
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               {/* 작은 상태 플레이어 */}
               <motion.div
                 initial={{ opacity: 1 }}
