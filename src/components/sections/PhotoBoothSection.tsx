@@ -27,10 +27,10 @@ export const PhotoBoothSection = () => {
               <p className="text-lg text-gray-700 leading-relaxed">
                 포토부스가 설치될 예정입니다.
               </p>
-              <p className="text-gray-600 mt-2 break-keep">
-                귀한 발걸음 해주신 여러분의 환한 미소와
+              <p className="text-gray-600 mt-2 break-keep whitespace-break-spaces">
+                귀한 발걸음 해주신 여러분의 환한 미소와 따뜻한 말씀
                 <br />
-                따뜻한 말씀 남겨주시면 소중히 간직하도록 하겠습니다.
+                남겨주시면 소중히 간직하도록 하겠습니다.
               </p>
             </div>
 
