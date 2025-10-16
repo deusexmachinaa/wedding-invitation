@@ -126,7 +126,7 @@ const AccountCard = ({
                         src="/icons/kakaopay.png"
                         alt="카카오페이"
                         width={32}
-                        height={32}
+                        height={13}
                       />
                       <span className="text-[#3C1E1E] font-semibold">
                         카카오페이
@@ -148,7 +148,7 @@ const AccountCard = ({
                         src="/icons/toss.png"
                         alt="토스"
                         width={32}
-                        height={32}
+                        height={16}
                       />
                       <span className="text-white font-semibold">토스</span>
                     </button>
@@ -298,7 +298,7 @@ export const AccountSection = ({
       // 토스 앱으로 이동 시도
       window.location.href = tossUrl;
 
-      // 앱이 없을 경우 폴백 (2.5초 후)
+      // 앱이 없을 경우 폴백 (2초 후)
       const fallbackTimer = setTimeout(() => {
         document.removeEventListener(
           "visibilitychange",
@@ -322,7 +322,7 @@ export const AccountSection = ({
             confirmButtonColor: "#0064FF",
           });
         }
-      }, 2500);
+      }, 2000);
     } else {
       // PC에서 접속한 경우
       const copyText = `${bank} ${accountNumber}`;
