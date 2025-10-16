@@ -11,6 +11,7 @@ import {
   ChevronDown,
   SkipForward,
   X,
+  ArrowUp,
 } from "lucide-react";
 import { BackgroundMusic } from "../../types";
 
@@ -41,6 +42,8 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [showHideZone, setShowHideZone] = useState(false);
   const [isVolumeDragging, setIsVolumeDragging] = useState(false);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   // 🎯 간단한 진행바 상태
   const [isProgressDragging, setIsProgressDragging] = useState(false);
@@ -242,6 +245,32 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
       audio.muted = isMuted;
     }
   }, [volume, isMuted]);
+
+  // 스크롤 방향 감지 및 버튼 표시/숨김
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // 스크롤 방향 감지
+      const isScrollingUp = currentScrollY < lastScrollY;
+
+      // 버튼 표시 조건: 위로 스크롤 중이고 300px 이상 스크롤했을 때
+      setShowScrollToTop(isScrollingUp && currentScrollY > 300);
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  // 스크롤 투 탑 함수
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   // 자동 재생 설정
   useEffect(() => {
@@ -660,6 +689,23 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
               )}
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 스크롤 투 탑 버튼 */}
+      <AnimatePresence>
+        {showScrollToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            onClick={scrollToTop}
+            className="fixed bottom-6 right-6 z-40 backdrop-blur-md bg-white/20 border border-white/30 text-gray-700 p-3 rounded-full shadow-xl hover:bg-white/30 hover:border-white/50 transition-all duration-300 hover:scale-110 active:scale-95"
+            whileHover={{ scale: 1.1, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
         )}
       </AnimatePresence>
 
