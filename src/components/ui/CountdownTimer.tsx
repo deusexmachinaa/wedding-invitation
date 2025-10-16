@@ -58,6 +58,19 @@ export const CountdownTimer = ({
 
   const [currentMonth, setCurrentMonth] = useState(new Date(ceremony.date));
 
+  // 날짜 기준 D-day 계산 (메시지용)
+  const calculateDaysUntilWedding = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const weddingDay = new Date(ceremony.date);
+    weddingDay.setHours(0, 0, 0, 0);
+
+    const diffTime = weddingDay.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+  };
+
   const generateCalendarDays = () => {
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(currentMonth);
@@ -68,14 +81,19 @@ export const CountdownTimer = ({
   };
 
   const calculateTimeRemaining = (target: Date): TimeRemaining => {
-    const now = new Date().getTime();
+    const now = new Date();
     const targetTime = target.getTime();
-    const difference = targetTime - now;
+    const difference = targetTime - now.getTime();
 
     if (difference <= 0) {
-      // 날짜가 지난 경우 경과한 일수 계산
-      const daysPassed = Math.floor(
-        Math.abs(difference) / (1000 * 60 * 60 * 24)
+      // 날짜가 지난 경우 경과한 일수 계산 (날짜 기준)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const weddingDay = new Date(target);
+      weddingDay.setHours(0, 0, 0, 0);
+
+      const daysPassed = Math.ceil(
+        Math.abs(weddingDay.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
       );
       return {
         days: 0,
@@ -87,6 +105,7 @@ export const CountdownTimer = ({
       };
     }
 
+    // 정확한 시간 차이로 카운터 계산 (일/시/분/초)
     return {
       days: Math.floor(difference / (1000 * 60 * 60 * 24)),
       hours: Math.floor(
@@ -245,8 +264,10 @@ export const CountdownTimer = ({
                   "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
               }}
             >
-              <span className="text-pink-400">{timeRemaining.days}</span>일
-              남았습니다.
+              <span className="text-pink-400">
+                {calculateDaysUntilWedding()}
+              </span>
+              일 남았습니다.
             </p>
           </div>
         </motion.div>
@@ -413,13 +434,16 @@ export const CountdownTimer = ({
               className="text-center pt-6 border-t border-rose-200"
             >
               <p
-                className="text-lg text-gray-600 mb-4"
+                //줄바꿈 없이
+                className="text-lg text-gray-600 mb-4 break-keep"
                 style={{
                   fontFamily:
                     "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
                 }}
               >
-                함께 축하해주실 여러분을 기다리고 있습니다 💕
+                함께 축하해주실 여러분을
+                <br />
+                기다리고 있습니다 💕
               </p>
             </motion.div>
           </motion.div>
