@@ -282,7 +282,7 @@ export const GuestbookSection = () => {
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            className="w-full h-32 p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300"
+            className="w-full h-32 p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300 placeholder:text-gray-500"
             placeholder="따뜻한 마음을 전해주세요."
             maxLength={500}
           />
@@ -296,15 +296,15 @@ export const GuestbookSection = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="성함"
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300 placeholder:text-gray-500"
               maxLength={20}
             />
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="비밀번호 (삭제 시 필요)"
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300"
+              placeholder="비밀번호"
+              className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300 placeholder:text-gray-500"
               maxLength={20}
             />
           </div>
@@ -314,7 +314,7 @@ export const GuestbookSection = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full px-6 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-6 py-2 bg-pink-400 text-white rounded-lg hover:bg-pink-500 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? "작성중..." : "작성하기"}
           </button>
