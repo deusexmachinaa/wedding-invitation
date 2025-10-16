@@ -212,6 +212,8 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
           <NavigationButtons
             venueName={ceremony.venue}
             address={ceremony.address}
+            latitude={35.8824102975974}
+            longitude={128.662109053984}
           />
         </div>
 
@@ -294,7 +296,7 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
               <span className="text-2xl">🅿️</span>
               <div>
                 <h5 className="font-semibold text-gray-800 mb-2">주차 안내</h5>
-                <p className="text-sm text-gray-600 leading-relaxed">
+                <p className="text-sm text-gray-600 leading-relaxed break-keep">
                   본관 지상 및 지하주차장 600여대 주차 가능
                   <br />
                   <span className="text-xs text-gray-500">
