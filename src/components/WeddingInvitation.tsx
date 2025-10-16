@@ -41,6 +41,13 @@ export const WeddingInvitation = ({ data }: WeddingInvitationProps) => {
           </div>
         </AnimatedSection>
 
+        {/* 웨딩 정보 - 날짜, 시간, 장소 */}
+        <AnimatedSection delay={0.2}>
+          <div id="info">
+            <InfoSection ceremony={data.ceremony} />
+          </div>
+        </AnimatedSection>
+
         {/* 연락처 */}
         <AnimatedSection delay={0.2}>
           <div id="contact">
@@ -64,13 +71,6 @@ export const WeddingInvitation = ({ data }: WeddingInvitationProps) => {
         <AnimatedSection delay={0.2}>
           <div id="gallery">
             <GallerySection images={data.gallery} />
-          </div>
-        </AnimatedSection>
-
-        {/* 웨딩 정보 - 날짜, 시간, 장소 */}
-        <AnimatedSection delay={0.2}>
-          <div id="info">
-            <InfoSection ceremony={data.ceremony} />
           </div>
         </AnimatedSection>
 
