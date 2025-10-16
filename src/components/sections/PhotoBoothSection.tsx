@@ -25,12 +25,13 @@ export const PhotoBoothSection = () => {
             <div className="text-center">
               <Presentation className="w-8 h-8 mx-auto mb-3 text-pink-500" />
               <p className="text-lg text-gray-700 leading-relaxed">
-                포토부스가 설치될 예정입니다.
+                포토부스가 설치될 예정입니다
               </p>
               <p className="text-gray-600 mt-2 break-keep whitespace-break-spaces">
-                귀한 발걸음 해주신 여러분의 환한 미소와 따뜻한 말씀
+                귀한 발걸음 해주신 여러분의
                 <br />
-                남겨주시면 소중히 간직하도록 하겠습니다.
+                환한 미소를 남겨주시면 <br />
+                즐거운 추억으로 간직하겠습니다
               </p>
             </div>
 

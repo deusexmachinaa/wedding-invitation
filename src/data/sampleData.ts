@@ -134,7 +134,7 @@ export const sampleWeddingData: WeddingData = {
   ],
   specialNotices: [
     "포토부스가 설치될 예정입니다.",
-    "귀한 발걸음 해주신 여러분의 환한 미소와 따뜻한 말씀 남겨주시면 소중히 간직하도록 하겠습니다.",
+    "귀한 발걸음 해주신 여러분의 환한 미소를 남겨주시면 소중히 간직하도록 하겠습니다.",
   ],
   weddingColors: {
     primary: "#8B5A5A",

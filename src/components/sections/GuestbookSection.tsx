@@ -246,6 +246,26 @@ export const GuestbookSection = () => {
       <div className="max-w-2xl mx-auto">
         <SectionHeader englishTitle="GUESTBOOK" koreanTitle="방명록" />
 
+        {/* 안내 메시지 */}
+        <div className="text-center mb-8 px-4">
+          <p
+            className="text-lg text-gray-700 leading-relaxed mb-2"
+            style={{
+              fontFamily:
+                "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
+            }}
+          >
+            신랑 신부의 행복한 앞날을 위해
+            <br />
+            <span className="text-pink-500 font-semibold">
+              따뜻한 덕담 한 말씀
+            </span>
+            을 남겨주세요
+            <br />
+            소중한 추억으로 간직하겠습니다
+          </p>
+        </div>
+
         {/* Write Form */}
         <form
           onSubmit={handleSubmit}
@@ -283,7 +303,7 @@ export const GuestbookSection = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             className="w-full h-32 p-4 border border-gray-200 rounded-lg resize-none focus:outline-none focus:border-rose-300 focus:ring-1 focus:ring-rose-300 placeholder:text-gray-500"
-            placeholder="따뜻한 마음을 전해주세요."
+            placeholder="따뜻한 축하 메시지를 전해주세요. 🥰"
             maxLength={500}
           />
           <div className="text-right text-xs text-gray-400 mt-1 mb-4">
@@ -309,7 +329,7 @@ export const GuestbookSection = () => {
             />
           </div>
           <div className="text-xs text-gray-500 mb-4">
-            ⚠️ 비밀번호는 방명록 삭제 시 필요하니 기억해주세요.
+            비밀번호는 방명록 삭제 시 필요하니 기억해주세요.
           </div>
           <button
             type="submit"
@@ -333,39 +353,64 @@ export const GuestbookSection = () => {
             entries.map((entry) => (
               <div
                 key={entry.id}
-                className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                className="bg-gradient-to-br from-white via-rose-50/30 to-pink-50/40 p-8 rounded-lg shadow-md hover:shadow-lg transition-all relative border border-rose-100"
+                style={{
+                  fontFamily:
+                    "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
+                }}
               >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-800">
-                      {entry.name}
-                    </span>
-                    <span
-                      className={`text-xs px-2 py-0.5 rounded-full ${
-                        entry.is_groom
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-pink-100 text-pink-700"
-                      }`}
-                    >
-                      {entry.is_groom ? "신랑측" : "신부측"}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">
-                      {formatDate(entry.created_at)}
-                    </span>
-                    <button
-                      onClick={() => handleDelete(entry.id)}
-                      className="text-red-500 hover:text-red-700 text-sm"
-                      title="삭제"
-                    >
-                      🗑️
-                    </button>
-                  </div>
+                {/* 편지지 장식 라인 */}
+                <div className="absolute top-4 left-0 w-1 h-12 bg-gradient-to-b from-pink-300 to-rose-300 rounded-r"></div>
+
+                {/* 날짜와 삭제 버튼 */}
+                <div className="flex justify-end items-center gap-2 mb-4 text-xs text-gray-400">
+                  <span>{formatDate(entry.created_at)}</span>
+                  <button
+                    onClick={() => handleDelete(entry.id)}
+                    className="text-red-400 hover:text-red-600 transition-colors"
+                    title="삭제"
+                  >
+                    🗑️
+                  </button>
                 </div>
-                <p className="text-gray-700 whitespace-pre-wrap break-words">
-                  {entry.message}
-                </p>
+
+                {/* To. 신랑님/신부님 */}
+                <div className="mb-6">
+                  <p className="text-gray-600 text-base">
+                    <span className="font-semibold text-pink-500">To.</span>{" "}
+                    <span className="font-medium">
+                      {entry.is_groom ? "신랑" : "신부"}
+                    </span>
+                  </p>
+                </div>
+
+                {/* 메시지 내용 */}
+                <div className="my-6 px-2">
+                  <p className="text-gray-700 whitespace-pre-wrap break-words leading-relaxed text-base">
+                    {entry.message}
+                  </p>
+                </div>
+
+                {/* From. 이름 */}
+                <div className="mt-8 text-right">
+                  <p className="text-gray-600 text-base">
+                    <span className="font-semibold text-pink-500">From.</span>{" "}
+                    <span className="font-medium">{entry.name}</span>
+                  </p>
+                </div>
+
+                {/* 신랑측/신부측 배지 (작게 표시) */}
+                <div className="absolute bottom-4 left-4">
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full ${
+                      entry.is_groom
+                        ? "bg-blue-100/70 text-blue-700"
+                        : "bg-pink-100/70 text-pink-700"
+                    }`}
+                  >
+                    {entry.is_groom ? "신랑측" : "신부측"}
+                  </span>
+                </div>
               </div>
             ))
           )}
