@@ -32,66 +32,86 @@ export const WeddingInvitation = ({ data }: WeddingInvitationProps) => {
 
         {/* 초대 메시지 */}
         <AnimatedSection delay={0.2}>
-          <InvitationSection
-            message={data.invitationMessage}
-            groom={data.groom}
-            bride={data.bride}
-          />
+          <div id="invitation">
+            <InvitationSection
+              message={data.invitationMessage}
+              groom={data.groom}
+              bride={data.bride}
+            />
+          </div>
         </AnimatedSection>
 
         {/* 연락처 */}
         <AnimatedSection delay={0.2}>
-          <ContactSection groom={data.groom} bride={data.bride} />
+          <div id="contact">
+            <ContactSection groom={data.groom} bride={data.bride} />
+          </div>
         </AnimatedSection>
 
         {/* 카운트다운 타이머 */}
         <AnimatedSection delay={0.1}>
-          <CountdownTimer
-            targetDate={data.ceremony.date}
-            groomName={data.groom.name}
-            brideName={data.bride.name}
-            ceremony={data.ceremony}
-          />
+          <div id="countdown">
+            <CountdownTimer
+              targetDate={data.ceremony.date}
+              groomName={data.groom.name}
+              brideName={data.bride.name}
+              ceremony={data.ceremony}
+            />
+          </div>
         </AnimatedSection>
 
         {/* 갤러리 */}
         <AnimatedSection delay={0.2}>
-          <GallerySection images={data.gallery} />
+          <div id="gallery">
+            <GallerySection images={data.gallery} />
+          </div>
         </AnimatedSection>
 
         {/* 웨딩 정보 - 날짜, 시간, 장소 */}
         <AnimatedSection delay={0.2}>
-          <InfoSection ceremony={data.ceremony} />
+          <div id="info">
+            <InfoSection ceremony={data.ceremony} />
+          </div>
         </AnimatedSection>
 
         {/* 오시는 길 */}
         <AnimatedSection delay={0.2}>
-          <LocationSection ceremony={data.ceremony} />
+          <div id="location">
+            <LocationSection ceremony={data.ceremony} />
+          </div>
         </AnimatedSection>
 
         {/* 포토부스 이용안내 */}
         <AnimatedSection delay={0.2}>
-          <PhotoBoothSection />
+          <div id="photobooth">
+            <PhotoBoothSection />
+          </div>
         </AnimatedSection>
 
         {/* 방명록 */}
         <AnimatedSection delay={0.2}>
-          <GuestbookSection />
+          <div id="guestbook">
+            <GuestbookSection />
+          </div>
         </AnimatedSection>
 
         {/* 계좌 정보 */}
         <AnimatedSection delay={0.2}>
-          <AccountSection
-            groomAccounts={data.groomAccounts}
-            brideAccounts={data.brideAccounts}
-            groomName={data.groom.name}
-            brideName={data.bride.name}
-          />
+          <div id="account">
+            <AccountSection
+              groomAccounts={data.groomAccounts}
+              brideAccounts={data.brideAccounts}
+              groomName={data.groom.name}
+              brideName={data.bride.name}
+            />
+          </div>
         </AnimatedSection>
 
         {/* 푸터 */}
         <AnimatedSection delay={0.2}>
-          <FooterSection />
+          <div id="footer">
+            <FooterSection />
+          </div>
         </AnimatedSection>
       </div>
 
