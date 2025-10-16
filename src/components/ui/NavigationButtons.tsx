@@ -5,11 +5,15 @@ import Image from "next/image";
 interface NavigationButtonsProps {
   venueName: string;
   address: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export const NavigationButtons = ({
   venueName,
   address,
+  latitude,
+  longitude,
 }: NavigationButtonsProps) => {
   const isMobile = () => {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -64,8 +68,12 @@ export const NavigationButtons = ({
 
       case "kakao":
         if (mobile) {
-          const kakaoAppUrl = `kakaonavi://destination?name=${encodedVenue}`;
-          const kakaoWebUrl = `https://map.kakao.com/search/${encodedAddress}`;
+          // 좌표가 있으면 좌표로, 없으면 이름으로
+          const kakaoAppUrl =
+            latitude && longitude
+              ? `kakaonavi://destination?name=${encodedVenue}&lat=${latitude}&lng=${longitude}`
+              : `kakaonavi://search?query=${encodedAddress}`;
+          const kakaoWebUrl = `https://map.kakao.com/link/map/${encodedVenue},${latitude},${longitude}`;
 
           window.location.href = kakaoAppUrl;
 
@@ -87,10 +95,12 @@ export const NavigationButtons = ({
             );
           }, 3000);
         } else {
-          window.open(
-            `https://map.kakao.com/search/${encodedAddress}`,
-            "_blank"
-          );
+          // 데스크톱에서도 좌표 사용
+          const kakaoWebUrl =
+            latitude && longitude
+              ? `https://map.kakao.com/link/map/${encodedVenue},${latitude},${longitude}`
+              : `https://map.kakao.com/search/${encodedAddress}`;
+          window.open(kakaoWebUrl, "_blank");
         }
         break;
 
