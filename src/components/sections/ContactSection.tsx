@@ -69,7 +69,7 @@ export const ContactSection = ({ groom, bride }: ContactSectionProps) => {
   );
 
   return (
-    <section className="py-16 px-6 bg-gradient-to-br from-rose-100 via-pink-50 to-purple-50">
+    <section className="py-16 px-6 bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
       <div className="max-w-4xl mx-auto">
         <SectionHeader englishTitle="CONTACT" koreanTitle="연락처" />
 

@@ -165,7 +165,7 @@ export const CountdownTimer = ({
     const daysPassed = timeRemaining.daysPassed || 0;
 
     return (
-      <section className="py-16 px-6 bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
+      <section className="py-16 px-6 bg-gradient-to-br from-rose-50 via-pink-100 to-purple-50">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -211,7 +211,7 @@ export const CountdownTimer = ({
   const weddingDate = new Date(ceremony.date);
 
   return (
-    <section className="py-16 px-6 bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
+    <section className="py-16 px-6 bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50">
       <div className="max-w-6xl mx-auto">
         {/* 헤더 섹션 */}
         <motion.div

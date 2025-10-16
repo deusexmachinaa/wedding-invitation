@@ -73,14 +73,14 @@ export const HeaderSection = ({
     {
       id: "main",
       englishTitle: "WEDDING INVITATION",
-      title: "Wedding Invitation",
+      title: "청첩장",
       subtitle: `${groom.name} ♥ ${bride.name}`,
       icon: <Heart className="w-16 h-16 text-rose-400" />,
       targetSection: "header",
     },
     {
       id: "invitation",
-      englishTitle: "INVITATION",
+      englishTitle: "WELCOME",
       title: "초대합니다",
       subtitle: "소중한 분들을 초대드립니다",
       icon: <Mail className="w-16 h-16 text-rose-400" />,
@@ -247,9 +247,12 @@ export const HeaderSection = ({
                     <div>
                       {/* 웨딩 타이틀 */}
                       <div className="mb-6">
-                        <h1 className="text-2xl sm:text-3xl font-light text-gray-700 mb-2">
-                          Wedding Invitation
-                        </h1>
+                        <p className="text-xs font-semibold tracking-[0.25em] text-rose-400 uppercase mb-2 opacity-90">
+                          WEDDING INVITATION
+                        </p>
+                        {/* <h1 className="text-2xl sm:text-3xl font-light text-gray-700 mb-2">
+                          청첩장
+                        </h1> */}
                         <div className="w-24 h-0.5 bg-gradient-to-r from-rose-300 to-pink-300 mx-auto"></div>
                       </div>
 
