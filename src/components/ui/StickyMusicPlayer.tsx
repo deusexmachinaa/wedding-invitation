@@ -452,10 +452,20 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
             animate={{
               opacity: 1,
               y: 0,
+              x: showDragHint ? [0, -8, 8, -8, 8, -4, 4, 0] : 0,
               scale: isDragging ? 1.05 : 1,
             }}
             exit={{ opacity: 0, y: 100, scale: 0.8 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+              x: {
+                duration: 1.2,
+                repeat: showDragHint ? 1 : 0,
+                ease: "easeInOut",
+              },
+            }}
             className="fixed top-6 right-6 z-40"
             drag={!isVolumeDragging && !isProgressDragging}
             dragControls={dragControls}
@@ -519,7 +529,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
                   {/* 재생 버튼 */}
                   <button
                     onClick={togglePlay}
-                    className="w-10 h-10 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 flex items-center justify-center text-white shadow-md transition-all duration-200 hover:scale-105"
+                    className="w-10 h-10 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 flex items-center justify-center text-white shadow-md transition-all duration-300 hover:scale-105"
                   >
                     {isPlaying ? (
                       <Pause className="w-5 h-5" />
@@ -652,7 +662,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
                   {/* 진행 표시 - 간단한 인라인 방식 */}
                   <div className="mt-4">
                     <div
-                      className={`w-full bg-gray-200 rounded-full cursor-pointer transition-all duration-200 ${
+                      className={`w-full bg-gray-200 rounded-full cursor-pointer transition-all duration-300 ${
                         isProgressDragging ? "h-4" : "h-3 hover:h-4"
                       }`}
                       onClick={handleProgressClick}
