@@ -1,6 +1,6 @@
 "use client";
 
-import { Camera, Heart, Star } from "lucide-react";
+import { Camera, Star, Presentation } from "lucide-react";
 import { SectionHeader } from "../ui/SectionHeader";
 import { sampleWeddingData } from "@/data/sampleData";
 import Image from "next/image";
@@ -23,11 +23,11 @@ export const PhotoBoothSection = () => {
           <div className="space-y-6">
             {/* 메인 안내 */}
             <div className="text-center">
-              <Heart className="w-8 h-8 mx-auto mb-3 text-pink-500" />
+              <Presentation className="w-8 h-8 mx-auto mb-3 text-pink-500" />
               <p className="text-lg text-gray-700 leading-relaxed">
                 포토부스가 설치될 예정입니다.
               </p>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 mt-2 break-keep">
                 귀한 발걸음 해주신 여러분의 환한 미소와
                 <br />
                 따뜻한 말씀 남겨주시면 소중히 간직하도록 하겠습니다.
@@ -38,8 +38,8 @@ export const PhotoBoothSection = () => {
             <div className="border-t border-rose-100 my-6"></div>
 
             {/* 이용 안내 */}
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              <div className="p-4">
+            <div className="grid md:grid-cols-3 gap-5 text-center">
+              <div className="p-3">
                 <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-rose-600 font-bold text-lg">1</span>
                 </div>
@@ -51,7 +51,7 @@ export const PhotoBoothSection = () => {
                 </p>
               </div>
 
-              <div className="p-4">
+              <div className="p-3">
                 <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-rose-600 font-bold text-lg">2</span>
                 </div>
@@ -63,7 +63,7 @@ export const PhotoBoothSection = () => {
                 </p>
               </div>
 
-              <div className="p-4">
+              <div className="p-3">
                 <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-rose-600 font-bold text-lg">3</span>
                 </div>
@@ -78,14 +78,17 @@ export const PhotoBoothSection = () => {
 
             {/* 포토 스타일 안내 */}
             <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg p-6 mt-6">
-              <div className="flex items-center justify-center mb-6">
+              <div className="flex items-center justify-center mb-4">
                 <Star className="w-5 h-5 text-yellow-500 mr-2" />
                 <h4 className="font-medium text-gray-800">포토 스타일 제안</h4>
                 <Star className="w-5 h-5 text-yellow-500 ml-2" />
               </div>
-              <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+              <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 items-stretch">
                 {photoBoothExamples.map((example) => (
-                  <div key={example.id} className="text-center">
+                  <div
+                    key={example.id}
+                    className="text-center flex flex-col h-full"
+                  >
                     {/* 예시 이미지 */}
                     <div className="relative w-full aspect-square mb-3 rounded-lg overflow-hidden shadow-md">
                       <Image
@@ -97,11 +100,15 @@ export const PhotoBoothSection = () => {
                       />
                     </div>
                     {/* 스타일 설명 */}
-                    <div className="bg-white rounded-lg p-1 mb-2">
-                      <span className="font-medium text-base">
-                        {example.emoji} {example.style}
+                    <div className="bg-white rounded-lg p-3 flex-1 flex flex-col justify-center">
+                      <span className="font-medium text-base block mb-1">
+                        {example.emoji}
+                        <br />
+                        {example.style}
                       </span>
-                      <p className="mt-1 text-xs">{example.description}</p>
+                      <p className="text-xs leading-relaxed">
+                        {example.description}
+                      </p>
                     </div>
                   </div>
                 ))}
