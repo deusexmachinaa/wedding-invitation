@@ -41,7 +41,7 @@ const gowunDodum = Gowun_Dodum({
 
 export const metadata: Metadata = {
   title: "이태훈 ♥ 정혜원 결혼합니다",
-  description: "2025년 12월 21알 토요일 오후 4시 20분 퀸벨호텔 9F 퀸즈가든홀",
+  description: "2025년 12월 20일 토요일 오후 4시 20분 퀸벨호텔 9F 퀸즈가든홀",
   keywords: ["결혼식", "청첩장", "이태훈", "정혜원", "웨딩"],
   authors: [{ name: "Wedding Invitation" }],
   icons: {
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "이태훈 ♥ 정혜원 결혼합니다",
     description:
-      "2025년 12월 21일 토요일 오후 4시 20분 대구광역시 동구 동촌로 200 퀸벨호텔 9F 퀸즈가든홀",
+      "2025년 12월 20일 토요일 오후 4시 20분 대구광역시 동구 동촌로 200 퀸벨호텔 9F 퀸즈가든홀",
     type: "website",
     images: [
       {
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "이태훈 ♥ 정혜원 결혼합니다",
     description:
-      "2025년 12월 21일 토요일 오후 4시 20분 대구광역시 동구 동촌로 200 퀸벨호텔 9F 퀸즈가든홀",
+      "2025년 12월 20일 토요일 오후 4시 20분 대구광역시 동구 동촌로 200 퀸벨호텔 9F 퀸즈가든홀",
     images: ["/cover.jpg"],
   },
 };
