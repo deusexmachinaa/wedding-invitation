@@ -36,6 +36,7 @@ interface HeaderSectionProps {
 
 interface SectionCard {
   id: string;
+  englishTitle: string;
   title: string;
   subtitle: string;
   icon: React.ReactNode;
@@ -52,10 +53,26 @@ export const HeaderSection = ({
     locale: ko,
   });
 
+  // D-day 계산
+  const calculateDday = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const weddingDay = new Date(ceremony.date);
+    weddingDay.setHours(0, 0, 0, 0);
+
+    const diffTime = weddingDay.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return "D-Day";
+    if (diffDays > 0) return `D-${diffDays}`;
+    return `D+${Math.abs(diffDays)}`;
+  };
+
   // 섹션 카드 데이터
   const sectionCards: SectionCard[] = [
     {
       id: "main",
+      englishTitle: "WEDDING INVITATION",
       title: "Wedding Invitation",
       subtitle: `${groom.name} ♥ ${bride.name}`,
       icon: <Heart className="w-16 h-16 text-rose-400" />,
@@ -63,64 +80,73 @@ export const HeaderSection = ({
     },
     {
       id: "invitation",
+      englishTitle: "INVITATION",
       title: "초대합니다",
-      subtitle: "소중한 분들을 초대합니다",
+      subtitle: "소중한 분들을 초대드립니다",
       icon: <Mail className="w-16 h-16 text-rose-400" />,
       targetSection: "invitation",
     },
     {
+      id: "info",
+      englishTitle: "WEDDING INFO",
+      title: "예식 정보",
+      subtitle: "예식 장소와 시간을 안내드립니다",
+      icon: <Info className="w-16 h-16 text-rose-400" />,
+      targetSection: "info",
+    },
+    {
       id: "contact",
+      englishTitle: "CONTACT",
       title: "연락처",
-      subtitle: "신랑신부 연락처 정보",
+      subtitle: "신랑신부 연락처를 안내드립니다",
       icon: <Phone className="w-16 h-16 text-rose-400" />,
       targetSection: "contact",
     },
     {
       id: "countdown",
-      title: "달력",
-      subtitle: "결혼식까지 남은 날",
+      englishTitle: "D-DAY",
+      title: calculateDday(),
+      subtitle: "결혼식까지 남은 날입니다",
       icon: <Calendar className="w-16 h-16 text-rose-400" />,
       targetSection: "countdown",
     },
     {
       id: "gallery",
+      englishTitle: "GALLERY",
       title: "갤러리",
-      subtitle: "우리의 아름다운 순간들",
+      subtitle: "우리의 순간을 담았습니다",
       icon: <Camera className="w-16 h-16 text-rose-400" />,
       targetSection: "gallery",
     },
     {
-      id: "info",
-      title: "웨딩 정보",
-      subtitle: "예식 상세 정보",
-      icon: <Info className="w-16 h-16 text-rose-400" />,
-      targetSection: "info",
-    },
-    {
       id: "location",
+      englishTitle: "LOCATION",
       title: "오시는 길",
-      subtitle: "예식장 위치 안내",
+      subtitle: "예식장 위치를 안내드립니다",
       icon: <MapPin className="w-16 h-16 text-rose-400" />,
       targetSection: "location",
     },
     {
       id: "photobooth",
+      englishTitle: "PHOTO BOOTH",
       title: "포토부스",
-      subtitle: "특별한 추억 만들기",
+      subtitle: "특별한 추억을 만들어드립니다",
       icon: <Presentation className="w-16 h-16 text-rose-400" />,
       targetSection: "photobooth",
     },
     {
       id: "guestbook",
+      englishTitle: "GUESTBOOK",
       title: "방명록",
-      subtitle: "축하 메시지 남기기",
+      subtitle: "축하 메시지 남겨주세요",
       icon: <PenTool className="w-16 h-16 text-rose-400" />,
       targetSection: "guestbook",
     },
     {
       id: "account",
+      englishTitle: "THANK YOU",
       title: "마음 전하실 곳",
-      subtitle: "축의금 계좌 안내",
+      subtitle: "참석이 어려우신 분들을 위해 계좌번호를 기재하였습니다",
       icon: <Gift className="w-16 h-16 text-rose-400" />,
       targetSection: "account",
     },
@@ -281,10 +307,13 @@ export const HeaderSection = ({
                       <div className="mb-8 flex items-center justify-center">
                         {card.icon}
                       </div>
+                      <p className="text-xs font-semibold tracking-[0.25em] text-rose-400 uppercase mb-2 opacity-90">
+                        {card.englishTitle}
+                      </p>
                       <h2 className="text-3xl sm:text-4xl font-serif text-gray-900 mb-6">
                         {card.title}
                       </h2>
-                      <p className="text-lg sm:text-xl text-gray-700 mb-8">
+                      <p className="text-lg sm:text-xl text-gray-700 mb-8 break-keep font-gowun-dodum">
                         {card.subtitle}
                       </p>
                       <div className="text-sm text-gray-600 flex items-center justify-center gap-2 mt-4">
