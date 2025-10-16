@@ -270,24 +270,25 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
                 <p className="text-sm text-gray-600 leading-relaxed mb-3">
                   <span className="font-medium">서울/부산 에서 오시는 길:</span>
                   <br />
-                  동대구분기점 '(서)부산 밀양 방면' 오른쪽방향 → 동대구IC →
-                  동대구 톨게이트 → '시청' 방면 왼쪽 고가차도 진입 → 800m 전방
-                  우회전 → 용호네거리 좌회전 → 1.2km 전방 좌회전 → 퀸벨호텔
+                  동대구분기점 &apos;(서)부산 밀양 방면&apos; 오른쪽방향 →
+                  동대구IC → 동대구 톨게이트 → &apos;시청&apos; 방면 왼쪽
+                  고가차도 진입 → 800m 전방 우회전 → 용호네거리 좌회전 → 1.2km
+                  전방 좌회전 → 퀸벨호텔
                 </p>
                 <p className="text-sm text-gray-600 leading-relaxed mb-3">
                   <span className="font-medium">포항 에서 오시는 길:</span>
                   <br />
-                  포항IC → 팔공산 톨게이트 → '복현오거리 대구국제공항' 방면
-                  좌회전 → 불로삼거리에서 '대구국제공항' 방면 좌회전 → 3.2km
-                  전방 퀸벨호텔
+                  포항IC → 팔공산 톨게이트 → &apos;복현오거리 대구국제공항&apos;
+                  방면 좌회전 → 불로삼거리에서 &apos;대구국제공항&apos; 방면
+                  좌회전 → 3.2km 전방 퀸벨호텔
                 </p>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   <span className="font-medium">광주 에서 오시는 길:</span>
                   <br />
                   광주대구고속도로 → 중부내륙고속도로지선 → 경부고속도로 →
-                  동대구IC 동대구 톨게이트 → '시청' 방면 왼쪽 고가차도 진입 →
-                  800m 전방 우회전 → 용호네거리 좌회전 → 1.2km 전방 좌회전 →
-                  퀸벨호텔
+                  동대구IC 동대구 톨게이트 → &apos;시청&apos; 방면 왼쪽 고가차도
+                  진입 → 800m 전방 우회전 → 용호네거리 좌회전 → 1.2km 전방
+                  좌회전 → 퀸벨호텔
                 </p>
               </div>
             </div>
