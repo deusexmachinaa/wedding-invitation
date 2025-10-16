@@ -54,16 +54,6 @@ const AccountCard = ({
   const key = `${type}-${index}`;
   const hasTransferButtons = account.enableKakaoPay || account.enableToss;
 
-  // 디버깅용 로그
-  console.log(
-    `[${account.accountHolder}] enableKakaoPay:`,
-    account.enableKakaoPay,
-    "enableToss:",
-    account.enableToss,
-    "hasTransferButtons:",
-    hasTransferButtons
-  );
-
   return (
     <motion.div
       key={index}
