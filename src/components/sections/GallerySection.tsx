@@ -40,6 +40,18 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
     }
   };
 
+  // 현재 표시되는 이미지의 실제 인덱스를 가져오는 함수
+  const getCurrentDisplayedIndex = () => {
+    if (!mainSwiper) return currentIndex;
+
+    // 루프 모드에서 실제 표시되는 슬라이드의 인덱스 계산
+    const realIndex = mainSwiper.realIndex;
+    const activeIndex = mainSwiper.activeIndex;
+
+    // 루프 모드에서는 realIndex가 정확한 배열 인덱스
+    return realIndex;
+  };
+
   const toggleLightboxControls = () => {
     setShowLightboxControls(!showLightboxControls);
   };
@@ -182,6 +194,10 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
                   onSwiper={setMainSwiper}
                   onSlideChange={(swiper) => {
                     setCurrentIndex(swiper.realIndex);
+                    // 인디케이터 상태 강제 업데이트
+                    if (swiper.pagination) {
+                      swiper.pagination.update();
+                    }
                   }}
                   className="h-full w-full"
                   style={{ height: "100%", width: "100%" }}
@@ -190,7 +206,11 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
                     <SwiperSlide key={image.id}>
                       <div
                         className="w-full h-full cursor-pointer overflow-hidden group relative select-none"
-                        onClick={() => openLightbox(index)}
+                        onClick={() => {
+                          // 현재 표시되는 이미지의 실제 인덱스 사용
+                          const displayedIndex = getCurrentDisplayedIndex();
+                          openLightbox(displayedIndex);
+                        }}
                       >
                         <NextImage
                           src={image.url}
@@ -274,14 +294,16 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
               <div
                 key={image.id}
                 onClick={() => {
-                  if (index === currentIndex) {
+                  const displayedIndex = getCurrentDisplayedIndex();
+                  if (index === displayedIndex) {
                     // 현재 표시 중인 이미지면 라이트박스 열기
                     openLightbox(index);
                   } else {
                     // 다른 이미지면 해당 이미지로 이동
                     setCurrentIndex(index);
                     if (mainSwiper) {
-                      mainSwiper.slideTo(index);
+                      // 루프 모드에서는 slideToLoop 사용
+                      mainSwiper.slideToLoop(index, 300);
                     }
                   }
                 }}
@@ -357,7 +379,8 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
                 onSwiper={setLightboxSwiper}
                 onSlideChange={(swiper) => {
                   setCurrentIndex(swiper.realIndex);
-                  mainSwiper?.slideTo(swiper.realIndex);
+                  // 루프 모드에서는 slideToLoop 사용
+                  mainSwiper?.slideToLoop(swiper.realIndex, 0);
                 }}
                 className="max-h-[80vh] w-full"
               >
