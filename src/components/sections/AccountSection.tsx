@@ -30,7 +30,8 @@ interface AccountCardProps {
   onKakaoTransfer: (
     bank: string,
     accountNumber: string,
-    accountHolder: string
+    accountHolder: string,
+    kakaoPayLink?: string
   ) => void;
   onTossTransfer: (
     bank: string,
@@ -114,7 +115,8 @@ const AccountCard = ({
                         onKakaoTransfer(
                           account.bank,
                           account.accountNumber,
-                          account.accountHolder
+                          account.accountHolder,
+                          account.kakaoPayLink
                         )
                       }
                       className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#FEE500] hover:bg-[#FDD835] rounded-lg font-medium text-sm transition-all hover:scale-105 active:scale-95"
@@ -122,8 +124,8 @@ const AccountCard = ({
                       <Image
                         src="/icons/kakaopay.png"
                         alt="카카오페이"
-                        width={36}
-                        height={36}
+                        width={32}
+                        height={32}
                       />
                       <span className="text-[#3C1E1E] font-semibold">
                         카카오페이
@@ -144,8 +146,8 @@ const AccountCard = ({
                       <Image
                         src="/icons/toss.png"
                         alt="토스"
-                        width={36}
-                        height={36}
+                        width={32}
+                        height={32}
                       />
                       <span className="text-white font-semibold">토스</span>
                     </button>
@@ -166,40 +168,6 @@ export const AccountSection = ({
 }: AccountSectionProps) => {
   const [copiedIndex, setCopiedIndex] = useState<string | null>(null);
   const [expandedIndex, setExpandedIndex] = useState<string | null>(null);
-
-  // 한국 은행 코드 매핑
-  const bankCodeMap: { [key: string]: string } = {
-    KB국민은행: "004",
-    국민은행: "004",
-    신한은행: "088",
-    우리은행: "020",
-    하나은행: "081",
-    NH농협: "011",
-    농협: "011",
-    SC제일은행: "023",
-    한국씨티은행: "027",
-    KEB하나은행: "081",
-    카카오뱅크: "090",
-    케이뱅크: "089",
-    토스뱅크: "092",
-    대구은행: "031",
-    iM뱅크: "031",
-    부산은행: "032",
-    경남은행: "039",
-    광주은행: "034",
-    전북은행: "037",
-    제주은행: "035",
-    IBK기업은행: "003",
-    기업은행: "003",
-    수협은행: "007",
-    새마을금고: "045",
-    신협: "048",
-    우체국: "071",
-  };
-
-  const getBankCode = (bankName: string): string => {
-    return bankCodeMap[bankName] || "004"; // 기본값: 국민은행
-  };
 
   const handleCopyAccount = async (
     bank: string,
@@ -224,25 +192,16 @@ export const AccountSection = ({
   const handleKakaoTransfer = (
     bank: string,
     accountNumber: string,
-    accountHolder: string
+    accountHolder: string,
+    kakaoPayLink?: string
   ) => {
-    const bankCode = getBankCode(bank);
-    const cleanAccountNumber = accountNumber.replace(/-/g, "");
-
-    // 모바일 환경 감지
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-    if (isMobile) {
-      // 카카오페이 송금 딥링크
-      const kakaoPayUrl = `https://qr.kakaopay.com/Fd08af96a8beb71f6b1c1c38a1e0a13eb`;
-
-      alert(
-        `카카오페이 송금\n\n${bank} (${bankCode})\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}\n\n계좌번호가 복사되었습니다.\n카카오페이 앱에서 송금해주세요.`
-      );
-      navigator.clipboard.writeText(accountNumber);
+    if (kakaoPayLink) {
+      // 카카오페이 링크가 있으면 해당 링크로 이동
+      window.location.href = kakaoPayLink;
     } else {
+      // 링크가 없으면 계좌번호 복사
       alert(
-        `카카오페이 송금\n\n${bank} (${bankCode})\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}\n\n모바일에서 접속하시면 카카오페이 앱으로 바로 이동할 수 있습니다.\n계좌번호가 복사되었습니다.`
+        `카카오페이 송금\n\n${bank}\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}\n\n계좌번호가 복사되었습니다.\n카카오페이 앱에서 송금해주세요.`
       );
       navigator.clipboard.writeText(accountNumber);
     }
@@ -253,39 +212,91 @@ export const AccountSection = ({
     accountNumber: string,
     accountHolder: string
   ) => {
-    const bankCode = getBankCode(bank);
     const cleanAccountNumber = accountNumber.replace(/-/g, "");
+
+    // 토스에서 사용하는 은행 이름 매핑
+    const getBankNameForToss = (bankName: string): string => {
+      const bankMapping: { [key: string]: string } = {
+        농협: "NH농협은행",
+        NH농협: "NH농협은행",
+        국민은행: "KB국민은행",
+        신한은행: "신한은행",
+        우리은행: "우리은행",
+        하나은행: "하나은행",
+        기업은행: "IBK기업은행",
+        IBK기업은행: "IBK기업은행",
+        SC제일은행: "SC제일은행",
+        카카오뱅크: "카카오뱅크",
+        케이뱅크: "케이뱅크",
+        토스뱅크: "토스뱅크",
+        대구은행: "대구은행",
+        iM뱅크: "대구은행",
+        부산은행: "부산은행",
+        경남은행: "경남은행",
+        광주은행: "광주은행",
+        전북은행: "전북은행",
+        제주은행: "제주은행",
+        수협은행: "수협은행",
+        새마을금고: "새마을금고",
+        신협: "신협",
+        우체국: "우체국",
+      };
+
+      return bankMapping[bankName] || bankName;
+    };
 
     // 모바일 환경 감지
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // 토스 송금 딥링크 (실제 딥링크)
-      const tossUrl = `supertoss://send?bank=${bankCode}&accountNo=${cleanAccountNumber}&name=${encodeURIComponent(
-        accountHolder
-      )}`;
+      // 토스 송금 딥링크 (은행 이름을 URL 인코딩)
+      const bankName = getBankNameForToss(bank);
+      const tossUrl = `supertoss://send?amount=0&bank=${encodeURIComponent(
+        bankName
+      )}&accountNo=${cleanAccountNumber}`;
+
+      let appOpened = false;
+      let fallbackTimer: NodeJS.Timeout;
+
+      // 페이지 가시성 변경 감지 (앱이 실행되면 페이지가 숨겨짐)
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          appOpened = true;
+          clearTimeout(fallbackTimer);
+        }
+      };
+
+      // blur 이벤트로 앱 실행 감지
+      const handleBlur = () => {
+        appOpened = true;
+        clearTimeout(fallbackTimer);
+      };
+
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      window.addEventListener("blur", handleBlur);
 
       // 토스 앱으로 이동 시도
       window.location.href = tossUrl;
 
-      // 앱이 없을 경우 폴백 (1.5초 후)
-      setTimeout(() => {
-        const fallbackUrl = "https://toss.im/transfer";
-        if (
-          confirm(
-            "토스 앱이 설치되어 있지 않습니다.\n토스 다운로드 페이지로 이동하시겠습니까?"
-          )
-        ) {
-          window.location.href = fallbackUrl;
-        } else {
+      // 앱이 없을 경우 폴백 (2.5초 후)
+      fallbackTimer = setTimeout(() => {
+        document.removeEventListener(
+          "visibilitychange",
+          handleVisibilityChange
+        );
+        window.removeEventListener("blur", handleBlur);
+
+        if (!appOpened) {
           navigator.clipboard.writeText(accountNumber);
-          alert("계좌번호가 복사되었습니다.");
+          alert(
+            `토스 앱을 찾을 수 없습니다.\n\n계좌번호가 복사되었습니다.\n${bank}\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}`
+          );
         }
-      }, 1500);
+      }, 2500);
     } else {
       // PC에서 접속한 경우
       alert(
-        `토스 송금\n\n${bank} (${bankCode})\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}\n\n모바일에서 접속하시면 토스 앱으로 바로 이동할 수 있습니다.\n계좌번호가 복사되었습니다.`
+        `토스 송금\n\n${bank}\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}\n\n모바일에서 접속하시면 토스 앱으로 바로 이동할 수 있습니다.\n계좌번호가 복사되었습니다.`
       );
       navigator.clipboard.writeText(accountNumber);
     }

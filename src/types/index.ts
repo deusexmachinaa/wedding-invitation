@@ -38,6 +38,7 @@ export interface AccountInfo {
   accountNumber: string;
   accountHolder: string;
   enableKakaoPay?: boolean; // 카카오페이 송금 버튼 표시 여부
+  kakaoPayLink?: string; // 카카오페이 송금 링크
   enableToss?: boolean; // 토스 송금 버튼 표시 여부
 }
 

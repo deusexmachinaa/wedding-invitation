@@ -91,6 +91,7 @@ export const sampleWeddingData: WeddingData = {
       accountNumber: "352-0794-0534-53",
       accountHolder: "이태훈",
       enableKakaoPay: true,
+      kakaoPayLink: "https://qr.kakaopay.com/Ej7jIvOUg", // 카카오페이 QR 송금 링크
       enableToss: true,
     },
     {
