@@ -362,7 +362,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
     const screenHeight = window.innerHeight;
     const hideZone = screenHeight * HIDE_ZONE_RATIO;
     const currentY = info.point.y - window.scrollY; // 뷰포트 기준 좌표로 변환
-    const showZone = hideZone - screenHeight * 0.15; // hideZone보다 위쪽에서부터 표시
+    const showZone = hideZone - screenHeight * 0.7; // hideZone보다 위쪽에서부터 표시
 
     if (currentY > showZone && !showHideZone) {
       setShowHideZone(true);
@@ -374,6 +374,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
   // 드래그 종료
   const handleDragEnd = (_: unknown, info: { point: { y: number } }) => {
     setIsDragging(false);
+    setShowHideZone(false); // 드래그 종료 시 항상 hideZone 숨김
 
     const screenHeight = window.innerHeight;
     const hideZone = screenHeight * HIDE_ZONE_RATIO;
@@ -381,7 +382,6 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
 
     if (dropY > hideZone) {
       setIsHidden(true);
-      setShowHideZone(false);
     }
   };
 
