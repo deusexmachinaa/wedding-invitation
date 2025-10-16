@@ -16,14 +16,14 @@ export const InvitationSection = ({
 }: InvitationSectionProps) => {
   return (
     <section className="py-16 px-6 bg-white">
-      <div className="max-w-2xl mx-auto text-center font-jua">
+      <div className="max-w-2xl mx-auto text-center font-gowun-dodum">
         <SectionHeader
           englishTitle="INVITATION"
           koreanTitle="소중한 분들을 초대합니다"
         />
 
         <div className="mb-12">
-          <p className="text-lg leading-relaxed text-gray-700 whitespace-pre-line font-jua">
+          <p className="text-lg leading-relaxed text-gray-700 whitespace-pre-line font-gowun-dodum">
             {message}
           </p>
         </div>
