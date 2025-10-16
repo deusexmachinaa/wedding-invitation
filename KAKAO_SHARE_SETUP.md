@@ -28,7 +28,7 @@
 2. **Web 플랫폼 등록** 클릭
 3. 사이트 도메인 입력:
    ```
-   https://wedding-invitation-roan-omega.vercel.app
+   https://wedding-invitation.my
    ```
 4. **저장** 클릭
 
@@ -74,7 +74,7 @@ window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
 1. **공개된 이미지 URL** 사용 (HTTPS 필수)
 2. 현재 설정된 이미지:
    ```
-   https://wedding-invitation-roan-omega.vercel.app/cover.jpg
+   https://wedding-invitation.my/cover.jpg
    ```
 3. 이미지 권장 사양:
    - 크기: 800x400px 이상

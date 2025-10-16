@@ -118,19 +118,18 @@ export const FooterSection = () => {
           title: "이태훈 ♥ 정혜원 결혼합니다",
           description:
             "2025년 12월 20일 토요일 오후 4시 20분\n퀸벨호텔 9F 퀸즈가든홀",
-          imageUrl:
-            "https://wedding-invitation-roan-omega.vercel.app/cover.jpg",
+          imageUrl: "https://wedding-invitation.my/cover.jpg",
           link: {
-            mobileWebUrl: "https://wedding-invitation-roan-omega.vercel.app/",
-            webUrl: "https://wedding-invitation-roan-omega.vercel.app/",
+            mobileWebUrl: "https://wedding-invitation.my/",
+            webUrl: "https://wedding-invitation.my/",
           },
         },
         buttons: [
           {
             title: "청첩장 보기",
             link: {
-              mobileWebUrl: "https://wedding-invitation-roan-omega.vercel.app/",
-              webUrl: "https://wedding-invitation-roan-omega.vercel.app/",
+              mobileWebUrl: "https://wedding-invitation.my/",
+              webUrl: "https://wedding-invitation.my/",
             },
           },
         ],
@@ -144,7 +143,7 @@ export const FooterSection = () => {
   };
 
   const handleShareWeb = () => {
-    const url = "https://wedding-invitation-roan-omega.vercel.app/";
+    const url = "https://wedding-invitation.my/";
     const title = "이태훈 ♥ 정혜원 결혼합니다";
     const text =
       "2025년 12월 20일 토요일 오후 4시 20분\n퀸벨호텔 9F 퀸즈가든홀";
@@ -169,7 +168,7 @@ export const FooterSection = () => {
   };
 
   const handleCopyLink = () => {
-    const url = "https://wedding-invitation-roan-omega.vercel.app/";
+    const url = "https://wedding-invitation.my/";
     navigator.clipboard
       .writeText(url)
       .then(() => {
