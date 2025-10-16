@@ -31,8 +31,8 @@ export const sampleWeddingData: WeddingData = {
 배려하며 살겠습니다.
 
 오로지 믿음과 사랑을 약속하는 날
-오셔서 축복해 주시면 더없는 기쁨으로
-간직하겠습니다.`,
+오셔서 축복해 주시면
+더없는 기쁨으로 간직하겠습니다.`,
   gallery: [
     {
       id: "1",
