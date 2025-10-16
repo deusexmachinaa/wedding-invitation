@@ -89,7 +89,7 @@ export const HeaderSection = ({
     {
       id: "info",
       englishTitle: "WEDDING INFO",
-      title: "예식 정보",
+      title: "예식 안내",
       subtitle: "예식 장소와 시간을 안내드립니다",
       icon: <Info className="w-16 h-16 text-rose-400" />,
       targetSection: "info",
@@ -98,7 +98,7 @@ export const HeaderSection = ({
       id: "contact",
       englishTitle: "CONTACT",
       title: "연락처",
-      subtitle: "신랑신부 연락처를 안내드립니다",
+      subtitle: "따뜻한 인사를 전하실 수 있도록 연락처를 공유드립니다",
       icon: <Phone className="w-16 h-16 text-rose-400" />,
       targetSection: "contact",
     },
