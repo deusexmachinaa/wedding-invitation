@@ -8,6 +8,7 @@ import {
   Heart,
   ChevronLeft,
   ChevronRight,
+  CalendarPlus,
 } from "lucide-react";
 import {
   format,
@@ -22,15 +23,13 @@ import {
   subMonths,
 } from "date-fns";
 import { ko } from "date-fns/locale";
+import { CeremonyInfo } from "@/types";
 
 interface CountdownTimerProps {
   targetDate: string; // YYYY-MM-DD 형식
   groomName: string;
   brideName: string;
-  ceremony: {
-    time: string;
-    date: string;
-  };
+  ceremony: CeremonyInfo;
 }
 
 interface TimeRemaining {
@@ -209,6 +208,68 @@ export const CountdownTimer = ({
 
   const calendarDays = generateCalendarDays();
   const weddingDate = new Date(ceremony.date);
+
+  // Google Calendar 링크 생성
+  const addToGoogleCalendar = () => {
+    const startDateTime = `${ceremony.date.replace(/-/g, "")}T162000`;
+    const endDateTime = `${ceremony.date.replace(/-/g, "")}T182000`; // 2시간 후
+
+    const title = `${groomName} ❤️ ${brideName} 결혼식`;
+    const venueName = ceremony.hall
+      ? `${ceremony.venue} ${ceremony.hall}`
+      : ceremony.venue;
+    const details = `${groomName}과 ${brideName}의 결혼식에 초대합니다.\n\n장소: ${venueName}\n주소: ${ceremony.address}`;
+    const location = `${venueName}, ${ceremony.address}`;
+
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+      title
+    )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
+      details
+    )}&location=${encodeURIComponent(location)}`;
+
+    window.open(googleCalendarUrl, "_blank");
+  };
+
+  // .ics 파일 다운로드 (Apple Calendar, Outlook 등)
+  const downloadICSFile = () => {
+    const startDateTime = `${ceremony.date.replace(/-/g, "")}T162000`;
+    const endDateTime = `${ceremony.date.replace(/-/g, "")}T182000`;
+    const venueName = ceremony.hall
+      ? `${ceremony.venue} ${ceremony.hall}`
+      : ceremony.venue;
+    const location = `${venueName}, ${ceremony.address}`;
+
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Wedding Invitation//Calendar//KO",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      `DTSTART:${startDateTime}`,
+      `DTEND:${endDateTime}`,
+      `SUMMARY:${groomName} ❤️ ${brideName} 결혼식`,
+      `DESCRIPTION:${groomName}과 ${brideName}의 결혼식에 초대합니다.\\n\\n장소: ${venueName}\\n주소: ${ceremony.address}`,
+      `LOCATION:${location}`,
+      "STATUS:CONFIRMED",
+      "SEQUENCE:0",
+      "BEGIN:VALARM",
+      "TRIGGER:-P1D",
+      "DESCRIPTION:내일 결혼식이 있습니다",
+      "ACTION:DISPLAY",
+      "END:VALARM",
+      "END:VEVENT",
+      "END:VCALENDAR",
+    ].join("\r\n");
+
+    const blob = new Blob([icsContent], {
+      type: "text/calendar;charset=utf-8",
+    });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `${groomName}_${brideName}_wedding.ics`;
+    link.click();
+  };
 
   return (
     <section className="py-16 px-6 bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50">
@@ -445,6 +506,37 @@ export const CountdownTimer = ({
                 <br />
                 기다리고 있습니다 💕
               </p>
+
+              {/* 일정 추가 버튼 */}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={addToGoogleCalendar}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
+                  style={{
+                    fontFamily:
+                      "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
+                  }}
+                >
+                  <CalendarPlus className="w-5 h-5" />
+                  Google 캘린더에 추가
+                </motion.button>
+
+                {/* <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={downloadICSFile}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
+                  style={{
+                    fontFamily:
+                      "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
+                  }}
+                >
+                  <CalendarPlus className="w-5 h-5" />
+                  캘린더 파일 다운로드
+                </motion.button> */}
+              </div>
             </motion.div>
           </motion.div>
         </div>
