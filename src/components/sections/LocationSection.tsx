@@ -263,28 +263,31 @@ export const LocationSection = ({ ceremony }: LocationSectionProps) => {
 
           {/* 자가용 */}
           <div className="bg-purple-50 p-6 rounded-lg">
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-3 break-keep">
               <span className="text-2xl">🚗</span>
               <div>
                 <h5 className="font-semibold text-gray-800 mb-2">자가용</h5>
                 <p className="text-sm text-gray-600 leading-relaxed mb-3">
-                  <span className="font-medium">서울/부산 방면:</span>
+                  <span className="font-medium">서울/부산 에서 오시는 길:</span>
                   <br />
-                  동대구분기점 → 동대구IC → 동대구 톨게이트 → 시청 방면 왼쪽
-                  고가차도 진입 → 800m 전방 우회전 → 용호네거리 좌회전 → 1.2km
-                  전방 좌회전 → 퀸벨호텔
+                  동대구분기점 '(서)부산 밀양 방면' 오른쪽방향 → 동대구IC →
+                  동대구 톨게이트 → '시청' 방면 왼쪽 고가차도 진입 → 800m 전방
+                  우회전 → 용호네거리 좌회전 → 1.2km 전방 좌회전 → 퀸벨호텔
                 </p>
                 <p className="text-sm text-gray-600 leading-relaxed mb-3">
-                  <span className="font-medium">포항 방면:</span>
+                  <span className="font-medium">포항 에서 오시는 길:</span>
                   <br />
-                  포항IC → 팔공산 톨게이트 → 복현오거리/대구국제공항 방면 좌회전
-                  → 불로삼거리 대구국제공항 방면 좌회전 → 3.2km 전방 퀸벨호텔
+                  포항IC → 팔공산 톨게이트 → '복현오거리 대구국제공항' 방면
+                  좌회전 → 불로삼거리에서 '대구국제공항' 방면 좌회전 → 3.2km
+                  전방 퀸벨호텔
                 </p>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  <span className="font-medium">광주 방면:</span>
+                  <span className="font-medium">광주 에서 오시는 길:</span>
                   <br />
                   광주대구고속도로 → 중부내륙고속도로지선 → 경부고속도로 →
-                  동대구IC (이후 서울/부산 방면과 동일)
+                  동대구IC 동대구 톨게이트 → '시청' 방면 왼쪽 고가차도 진입 →
+                  800m 전방 우회전 → 용호네거리 좌회전 → 1.2km 전방 좌회전 →
+                  퀸벨호텔
                 </p>
               </div>
             </div>
