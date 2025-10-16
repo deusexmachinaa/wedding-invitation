@@ -93,7 +93,7 @@ export const sampleWeddingData: WeddingData = {
     },
     {
       bank: "iM뱅크",
-      accountNumber: "010-52-944221",
+      accountNumber: "010-5294-4221",
       accountHolder: "이재교",
     },
     {
