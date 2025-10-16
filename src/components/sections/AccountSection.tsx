@@ -219,6 +219,7 @@ export const AccountSection = ({
       const bankMapping: { [key: string]: string } = {
         농협: "NH농협은행",
         NH농협: "NH농협은행",
+        KB: "KB국민은행",
         국민은행: "KB국민은행",
         신한은행: "신한은행",
         우리은행: "우리은행",
@@ -228,6 +229,7 @@ export const AccountSection = ({
         SC제일은행: "SC제일은행",
         카카오뱅크: "카카오뱅크",
         케이뱅크: "케이뱅크",
+        토스: "토스뱅크",
         토스뱅크: "토스뱅크",
         대구은행: "대구은행",
         iM뱅크: "대구은행",
@@ -256,7 +258,6 @@ export const AccountSection = ({
       )}&accountNo=${cleanAccountNumber}`;
 
       let appOpened = false;
-      let fallbackTimer: NodeJS.Timeout;
 
       // 페이지 가시성 변경 감지 (앱이 실행되면 페이지가 숨겨짐)
       const handleVisibilityChange = () => {
@@ -279,7 +280,7 @@ export const AccountSection = ({
       window.location.href = tossUrl;
 
       // 앱이 없을 경우 폴백 (2.5초 후)
-      fallbackTimer = setTimeout(() => {
+      const fallbackTimer = setTimeout(() => {
         document.removeEventListener(
           "visibilitychange",
           handleVisibilityChange
