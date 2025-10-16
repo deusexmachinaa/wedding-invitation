@@ -14,6 +14,162 @@ interface AccountSectionProps {
   brideName: string;
 }
 
+interface AccountCardProps {
+  account: AccountInfo;
+  index: number;
+  type: "groom" | "bride";
+  isCopied: boolean;
+  isExpanded: boolean;
+  onCopy: (
+    bank: string,
+    accountNumber: string,
+    index: number,
+    type: "groom" | "bride"
+  ) => void;
+  onToggleExpand: (key: string) => void;
+  onKakaoTransfer: (
+    bank: string,
+    accountNumber: string,
+    accountHolder: string
+  ) => void;
+  onTossTransfer: (
+    bank: string,
+    accountNumber: string,
+    accountHolder: string
+  ) => void;
+}
+
+// 계좌 카드 컴포넌트
+const AccountCard = ({
+  account,
+  index,
+  type,
+  isCopied,
+  isExpanded,
+  onCopy,
+  onToggleExpand,
+  onKakaoTransfer,
+  onTossTransfer,
+}: AccountCardProps) => {
+  const key = `${type}-${index}`;
+  const hasTransferButtons = account.enableKakaoPay || account.enableToss;
+
+  // 디버깅용 로그
+  console.log(
+    `[${account.accountHolder}] enableKakaoPay:`,
+    account.enableKakaoPay,
+    "enableToss:",
+    account.enableToss,
+    "hasTransferButtons:",
+    hasTransferButtons
+  );
+
+  return (
+    <motion.div
+      key={index}
+      className="bg-white rounded-lg shadow-sm overflow-hidden"
+      initial={false}
+    >
+      <div className="p-4">
+        <div className="flex justify-between items-center">
+          <div className="flex-1">
+            <div className="font-medium text-gray-800">
+              {account.accountHolder}
+            </div>
+            <div className="text-sm text-gray-600">
+              {account.bank} {account.accountNumber}
+            </div>
+          </div>
+          <div className="flex gap-2 items-center">
+            <button
+              onClick={() =>
+                onCopy(account.bank, account.accountNumber, index, type)
+              }
+              className={`px-3 py-1 rounded text-sm transition-colors ${
+                isCopied
+                  ? "bg-green-100 text-green-600"
+                  : "bg-rose-100 text-rose-600 hover:bg-rose-200"
+              }`}
+            >
+              {isCopied ? "복사완료" : "복사"}
+            </button>
+            {hasTransferButtons && (
+              <motion.button
+                onClick={() => onToggleExpand(key)}
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                animate={{ rotate: isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ChevronDown className="w-4 h-4 text-gray-600" />
+              </motion.button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {hasTransferButtons && (
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <div className="px-4 pb-4 pt-0 border-t border-gray-100">
+                <div className="flex gap-3 mt-3">
+                  {account.enableKakaoPay && (
+                    <button
+                      onClick={() =>
+                        onKakaoTransfer(
+                          account.bank,
+                          account.accountNumber,
+                          account.accountHolder
+                        )
+                      }
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#FEE500] hover:bg-[#FDD835] rounded-lg font-medium text-sm transition-all hover:scale-105 active:scale-95"
+                    >
+                      <Image
+                        src="/icons/kakaopay.png"
+                        alt="카카오페이"
+                        width={36}
+                        height={36}
+                      />
+                      <span className="text-[#3C1E1E] font-semibold">
+                        카카오페이
+                      </span>
+                    </button>
+                  )}
+                  {account.enableToss && (
+                    <button
+                      onClick={() =>
+                        onTossTransfer(
+                          account.bank,
+                          account.accountNumber,
+                          account.accountHolder
+                        )
+                      }
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#0064FF] hover:bg-[#0052CC] rounded-lg font-medium text-sm transition-all hover:scale-105 active:scale-95"
+                    >
+                      <Image
+                        src="/icons/toss.png"
+                        alt="토스"
+                        width={36}
+                        height={36}
+                      />
+                      <span className="text-white font-semibold">토스</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
+    </motion.div>
+  );
+};
+
 export const AccountSection = ({
   groomAccounts,
   brideAccounts,
@@ -144,245 +300,48 @@ export const AccountSection = ({
       navigator.clipboard.writeText(accountNumber);
     }
   };
+  // 계좌 목록 렌더링 헬퍼 함수
+  const renderAccountList = (
+    accounts: AccountInfo[],
+    type: "groom" | "bride",
+    title: string
+  ) => (
+    <div>
+      <h3 className="text-lg font-medium text-gray-800 mb-4 text-center">
+        {title}
+      </h3>
+      <div className="space-y-3">
+        {accounts.map((account, index) => {
+          const key = `${type}-${index}`;
+          const isCopied = copiedIndex === key;
+          const isExpanded = expandedIndex === key;
+          return (
+            <AccountCard
+              key={key}
+              account={account}
+              index={index}
+              type={type}
+              isCopied={isCopied}
+              isExpanded={isExpanded}
+              onCopy={handleCopyAccount}
+              onToggleExpand={toggleExpanded}
+              onKakaoTransfer={handleKakaoTransfer}
+              onTossTransfer={handleTossTransfer}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
     <section className="py-16 px-6 bg-rose-50">
       <div className="max-w-2xl mx-auto">
         <SectionHeader englishTitle="ACCOUNT" koreanTitle="마음 전하실 곳" />
 
         <div className="grid md:grid-cols-2 gap-8">
-          {/* 신랑측 */}
-          <div>
-            <h3 className="text-lg font-medium text-gray-800 mb-4 text-center">
-              신랑측
-            </h3>
-            <div className="space-y-3">
-              {groomAccounts.map((account, index) => {
-                const key = `groom-${index}`;
-                const isCopied = copiedIndex === key;
-                const isExpanded = expandedIndex === key;
-                return (
-                  <motion.div
-                    key={index}
-                    className="bg-white rounded-lg shadow-sm overflow-hidden"
-                    initial={false}
-                  >
-                    <div className="p-4">
-                      <div className="flex justify-between items-center">
-                        <div className="flex-1">
-                          <div className="font-medium text-gray-800">
-                            {account.accountHolder}
-                          </div>
-                          <div className="text-sm text-gray-600">
-                            {account.bank} {account.accountNumber}
-                          </div>
-                        </div>
-                        <div className="flex gap-2 items-center">
-                          <button
-                            onClick={() =>
-                              handleCopyAccount(
-                                account.bank,
-                                account.accountNumber,
-                                index,
-                                "groom"
-                              )
-                            }
-                            className={`px-3 py-1 rounded text-sm transition-colors ${
-                              isCopied
-                                ? "bg-green-100 text-green-600"
-                                : "bg-rose-100 text-rose-600 hover:bg-rose-200"
-                            }`}
-                          >
-                            {isCopied ? "복사완료" : "복사"}
-                          </button>
-                          <motion.button
-                            onClick={() => toggleExpanded(key)}
-                            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                            animate={{ rotate: isExpanded ? 180 : 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <ChevronDown className="w-4 h-4 text-gray-600" />
-                          </motion.button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                        >
-                          <div className="px-4 pb-4 pt-0 border-t border-gray-100">
-                            <div className="flex gap-3 mt-3">
-                              <button
-                                onClick={() =>
-                                  handleKakaoTransfer(
-                                    account.bank,
-                                    account.accountNumber,
-                                    account.accountHolder
-                                  )
-                                }
-                                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#FEE500] hover:bg-[#FDD835] rounded-lg font-medium text-sm transition-all hover:scale-105 active:scale-95"
-                              >
-                                <Image
-                                  src="/icons/kakaopay.png"
-                                  alt="카카오페이"
-                                  width={36}
-                                  height={36}
-                                />
-                                <span className="text-[#3C1E1E] font-semibold">
-                                  카카오페이
-                                </span>
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleTossTransfer(
-                                    account.bank,
-                                    account.accountNumber,
-                                    account.accountHolder
-                                  )
-                                }
-                                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#0064FF] hover:bg-[#0052CC] rounded-lg font-medium text-sm transition-all hover:scale-105 active:scale-95"
-                              >
-                                <Image
-                                  src="/icons/toss.png"
-                                  alt="토스"
-                                  width={36}
-                                  height={36}
-                                />
-                                <span className="text-white font-semibold">
-                                  토스
-                                </span>
-                              </button>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 신부측 */}
-          <div>
-            <h3 className="text-lg font-medium text-gray-800 mb-4 text-center">
-              신부측
-            </h3>
-            <div className="space-y-3">
-              {brideAccounts.map((account, index) => {
-                const key = `bride-${index}`;
-                const isCopied = copiedIndex === key;
-                const isExpanded = expandedIndex === key;
-                return (
-                  <motion.div
-                    key={index}
-                    className="bg-white rounded-lg shadow-sm overflow-hidden"
-                    initial={false}
-                  >
-                    <div className="p-4">
-                      <div className="flex justify-between items-center">
-                        <div className="flex-1">
-                          <div className="font-medium text-gray-800">
-                            {account.accountHolder}
-                          </div>
-                          <div className="text-sm text-gray-600">
-                            {account.bank} {account.accountNumber}
-                          </div>
-                        </div>
-                        <div className="flex gap-2 items-center">
-                          <button
-                            onClick={() =>
-                              handleCopyAccount(
-                                account.bank,
-                                account.accountNumber,
-                                index,
-                                "bride"
-                              )
-                            }
-                            className={`px-3 py-1 rounded text-sm transition-colors ${
-                              isCopied
-                                ? "bg-green-100 text-green-600"
-                                : "bg-rose-100 text-rose-600 hover:bg-rose-200"
-                            }`}
-                          >
-                            {isCopied ? "복사완료" : "복사"}
-                          </button>
-                          <motion.button
-                            onClick={() => toggleExpanded(key)}
-                            className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
-                            animate={{ rotate: isExpanded ? 180 : 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <ChevronDown className="w-4 h-4 text-gray-600" />
-                          </motion.button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
-                        >
-                          <div className="px-4 pb-4 pt-0 border-t border-gray-100">
-                            <div className="flex gap-3 mt-3">
-                              <button
-                                onClick={() =>
-                                  handleKakaoTransfer(
-                                    account.bank,
-                                    account.accountNumber,
-                                    account.accountHolder
-                                  )
-                                }
-                                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#FEE500] hover:bg-[#FDD835] rounded-lg font-medium text-sm transition-all hover:scale-105 active:scale-95"
-                              >
-                                <Image
-                                  src="/icons/kakaopay.png"
-                                  alt="카카오페이"
-                                  width={36}
-                                  height={36}
-                                />
-                                <span className="text-[#3C1E1E] font-semibold">
-                                  카카오페이
-                                </span>
-                              </button>
-                              <button
-                                onClick={() =>
-                                  handleTossTransfer(
-                                    account.bank,
-                                    account.accountNumber,
-                                    account.accountHolder
-                                  )
-                                }
-                                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#0064FF] hover:bg-[#0052CC] rounded-lg font-medium text-sm transition-all hover:scale-105 active:scale-95"
-                              >
-                                <Image
-                                  src="/icons/toss.png"
-                                  alt="토스"
-                                  width={36}
-                                  height={36}
-                                />
-                                <span className="text-white font-semibold">
-                                  토스
-                                </span>
-                              </button>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
+          {renderAccountList(groomAccounts, "groom", "신랑측")}
+          {renderAccountList(brideAccounts, "bride", "신부측")}
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-8 break-keep">
