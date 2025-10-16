@@ -16,7 +16,7 @@ export const InfoSection = ({ ceremony }: InfoSectionProps) => {
   });
 
   return (
-    <section className="py-16 px-6 bg-gradient-to-br from-white via-purple-50 to-rose-50">
+    <section className="py-16 px-6 bg-gradient-to-br from-white to-rose-50">
       <div className="max-w-2xl mx-auto text-center">
         <SectionHeader englishTitle="WEDDING INFO" koreanTitle="예식 안내" />
         <div className="text-xl font-light text-gray-800 mb-6">
