@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { SectionHeader } from "../ui/SectionHeader";
 import { supabase } from "@/lib/supabase";
+import Swal from "sweetalert2";
 
 interface GuestbookEntry {
   id: string;
@@ -80,12 +81,24 @@ export const GuestbookSection = () => {
     e.preventDefault();
 
     if (!name.trim() || !message.trim()) {
-      alert("성함과 메시지를 모두 입력해주세요.");
+      Swal.fire({
+        title: "입력 필요",
+        text: "성함과 메시지를 모두 입력해주세요.",
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#f472b6",
+      });
       return;
     }
 
     if (!password.trim()) {
-      alert("삭제를 위한 비밀번호를 입력해주세요.");
+      Swal.fire({
+        title: "비밀번호 필요",
+        text: "삭제를 위한 비밀번호를 입력해주세요.",
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#f472b6",
+      });
       return;
     }
 
@@ -105,28 +118,64 @@ export const GuestbookSection = () => {
 
       if (error) {
         console.error("Error submitting guestbook:", error);
-        alert("방명록 작성에 실패했습니다. 다시 시도해주세요.");
+        Swal.fire({
+          title: "작성 실패",
+          text: "방명록 작성에 실패했습니다. 다시 시도해주세요.",
+          icon: "error",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#f472b6",
+        });
         return;
       }
 
       setName("");
       setMessage("");
       setPassword("");
-      alert("방명록이 작성되었습니다. 감사합니다! 💕");
+      Swal.fire({
+        title: "작성 완료",
+        text: "방명록이 작성되었습니다. 감사합니다! 💕",
+        icon: "success",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#f472b6",
+      });
       // Manually reload to ensure immediate update
       await loadGuestbook();
     } catch (error) {
       console.error("Error submitting guestbook:", error);
-      alert("방명록 작성에 실패했습니다. 다시 시도해주세요.");
+      Swal.fire({
+        title: "작성 실패",
+        text: "방명록 작성에 실패했습니다. 다시 시도해주세요.",
+        icon: "error",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#f472b6",
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDelete = async (entryId: string) => {
-    const password = prompt("삭제하려면 작성 시 입력한 비밀번호를 입력하세요:");
+    const result = await Swal.fire({
+      title: "비밀번호 입력",
+      text: "삭제하려면 작성 시 입력한 비밀번호를 입력하세요:",
+      input: "password",
+      inputAttributes: {
+        autocapitalize: "off",
+      },
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소",
+      confirmButtonColor: "#f472b6",
+      cancelButtonColor: "#9ca3af",
+      inputValidator: (value) => {
+        if (!value) {
+          return "비밀번호를 입력해주세요.";
+        }
+        return null;
+      },
+    });
 
-    if (!password) {
+    if (!result.isConfirmed || !result.value) {
       return;
     }
 
@@ -135,26 +184,50 @@ export const GuestbookSection = () => {
         "soft_delete_guestbook_entry",
         {
           entry_id: entryId,
-          entry_password: password,
+          entry_password: result.value,
         }
       );
 
       if (error) {
         console.error("Error deleting entry:", error);
-        alert("삭제에 실패했습니다.");
+        Swal.fire({
+          title: "삭제 실패",
+          text: "삭제에 실패했습니다.",
+          icon: "error",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#f472b6",
+        });
         return;
       }
 
       if (data === true) {
-        alert("방명록이 삭제되었습니다.");
+        Swal.fire({
+          title: "삭제 완료",
+          text: "방명록이 삭제되었습니다.",
+          icon: "success",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#f472b6",
+        });
         // Manually reload to ensure immediate update
         await loadGuestbook();
       } else {
-        alert("비밀번호가 일치하지 않습니다.");
+        Swal.fire({
+          title: "비밀번호 오류",
+          text: "비밀번호가 일치하지 않습니다.",
+          icon: "error",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#f472b6",
+        });
       }
     } catch (error) {
       console.error("Error deleting entry:", error);
-      alert("삭제에 실패했습니다.");
+      Swal.fire({
+        title: "삭제 실패",
+        text: "삭제에 실패했습니다.",
+        icon: "error",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#f472b6",
+      });
     }
   };
 

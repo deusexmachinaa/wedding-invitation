@@ -6,6 +6,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 interface AccountSectionProps {
   groomAccounts: AccountInfo[];
@@ -195,15 +196,33 @@ export const AccountSection = ({
     accountHolder: string,
     kakaoPayLink?: string
   ) => {
-    if (kakaoPayLink) {
-      // 카카오페이 링크가 있으면 해당 링크로 이동
-      window.location.href = kakaoPayLink;
+    const copyText = `${bank} ${accountNumber}`;
+
+    // 모바일 환경 감지
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile && kakaoPayLink) {
+      // 모바일에서 링크가 있으면 새 창으로 열기
+      window.open(kakaoPayLink, "_blank");
     } else {
-      // 링크가 없으면 계좌번호 복사
-      alert(
-        `카카오페이 송금\n\n${bank}\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}\n\n계좌번호가 복사되었습니다.\n카카오페이 앱에서 송금해주세요.`
-      );
-      navigator.clipboard.writeText(accountNumber);
+      // PC이거나 링크가 없으면 은행명과 계좌번호 복사
+      navigator.clipboard.writeText(copyText);
+      Swal.fire({
+        title: "카카오페이",
+        html: `<div style="line-height: 1.8">
+          <strong>${bank}</strong><br/>
+          계좌번호: ${accountNumber}<br/>
+          예금주: ${accountHolder}<br/><br/>
+          ${
+            isMobile
+              ? "카카오페이 정보가 없습니다.<br/>계좌번호가 복사되었습니다."
+              : "모바일에서 접속하시면 카카오페이 앱으로<br/>바로 이동할 수 있습니다.<br/>계좌번호가 복사되었습니다."
+          }
+        </div>`,
+        icon: "info",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#FEE500",
+      });
     }
   };
 
@@ -288,18 +307,40 @@ export const AccountSection = ({
         window.removeEventListener("blur", handleBlur);
 
         if (!appOpened) {
-          navigator.clipboard.writeText(accountNumber);
-          alert(
-            `토스 앱을 찾을 수 없습니다.\n\n계좌번호가 복사되었습니다.\n${bank}\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}`
-          );
+          const copyText = `${bank} ${accountNumber}`;
+          navigator.clipboard.writeText(copyText);
+          Swal.fire({
+            title: "토스 앱을 찾을 수 없습니다",
+            html: `<div style="line-height: 1.8">
+              계좌번호가 복사되었습니다.<br/><br/>
+              <strong>${bank}</strong><br/>
+              계좌번호: ${accountNumber}<br/>
+              예금주: ${accountHolder}
+            </div>`,
+            icon: "info",
+            confirmButtonText: "확인",
+            confirmButtonColor: "#0064FF",
+          });
         }
       }, 2500);
     } else {
       // PC에서 접속한 경우
-      alert(
-        `토스 송금\n\n${bank}\n계좌번호: ${accountNumber}\n예금주: ${accountHolder}\n\n모바일에서 접속하시면 토스 앱으로 바로 이동할 수 있습니다.\n계좌번호가 복사되었습니다.`
-      );
-      navigator.clipboard.writeText(accountNumber);
+      const copyText = `${bank} ${accountNumber}`;
+      navigator.clipboard.writeText(copyText);
+      Swal.fire({
+        title: "토스 송금",
+        html: `<div style="line-height: 1.8">
+          <strong>${bank}</strong><br/>
+          계좌번호: ${accountNumber}<br/>
+          예금주: ${accountHolder}<br/><br/>
+          모바일에서 접속하시면 토스 앱으로<br/>
+          바로 이동할 수 있습니다.<br/>
+          계좌번호가 복사되었습니다.
+        </div>`,
+        icon: "info",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#0064FF",
+      });
     }
   };
   // 계좌 목록 렌더링 헬퍼 함수

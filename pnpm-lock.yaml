@@ -35,6 +35,9 @@ importers:
       react-share:
         specifier: ^5.2.2
         version: 5.2.2(react@19.1.0)
+      sweetalert2:
+        specifier: ^11.26.2
+        version: 11.26.2
       swiper:
         specifier: ^12.0.2
         version: 12.0.2
@@ -1810,6 +1813,9 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  sweetalert2@11.26.2:
+    resolution: {integrity: sha512-tR5oADjrN6gv+0Y/tpfMXM/rSlx/QHmRhygBHhWh29iw1AO/x7D8OhghyogaY+NLZrd4qfhssVafRBHi+DREzQ==}
 
   swiper@12.0.2:
     resolution: {integrity: sha512-y8F6fDGXmTVVgwqJj6I00l4FdGuhpFJn0U/9Ucn1MwWOw3NdLV8aH88pZOjyhBgU/6PyBlUx+JuAQ5KMWz906Q==}
@@ -3870,6 +3876,8 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  sweetalert2@11.26.2: {}
 
   swiper@12.0.2: {}
 

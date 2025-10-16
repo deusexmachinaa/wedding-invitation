@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 interface KakaoStatic {
   init: (key: string) => void;
@@ -98,16 +99,24 @@ export const FooterSection = () => {
 
   const handleShareKakao = () => {
     if (kakaoError) {
-      alert(
-        `카카오톡 공유를 사용할 수 없습니다.\n\n${kakaoError}\n\n개발자 콘솔(F12)을 확인해주세요.\n대신 '초대장 공유하기' 버튼을 사용해주세요.`
-      );
+      Swal.fire({
+        title: "카카오톡 공유 불가",
+        html: `카카오톡 공유를 사용할 수 없습니다.<br/><br/>${kakaoError}<br/><br/>개발자 콘솔(F12)을 확인해주세요.<br/>대신 '초대장 공유하기' 버튼을 사용해주세요.`,
+        icon: "error",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#f472b6",
+      });
       return;
     }
 
     if (!isKakaoReady || !window.Kakao) {
-      alert(
-        "카카오톡 공유 기능을 불러오는 중입니다. 잠시 후 다시 시도해주세요."
-      );
+      Swal.fire({
+        title: "잠시만 기다려주세요",
+        text: "카카오톡 공유 기능을 불러오는 중입니다. 잠시 후 다시 시도해주세요.",
+        icon: "info",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#f472b6",
+      });
       return;
     }
 
@@ -136,9 +145,13 @@ export const FooterSection = () => {
       });
     } catch (error) {
       console.error("❌ 카카오톡 공유 오류:", error);
-      alert(
-        "카카오톡 공유에 실패했습니다.\n대신 '초대장 공유하기' 버튼을 사용해주세요."
-      );
+      Swal.fire({
+        title: "공유 실패",
+        text: "카카오톡 공유에 실패했습니다.\n대신 '초대장 공유하기' 버튼을 사용해주세요.",
+        icon: "error",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#f472b6",
+      });
     }
   };
 
@@ -172,10 +185,23 @@ export const FooterSection = () => {
     navigator.clipboard
       .writeText(url)
       .then(() => {
-        alert("초대장 링크가 복사되었습니다!");
+        Swal.fire({
+          title: "복사 완료",
+          text: "초대장 링크가 복사되었습니다!",
+          icon: "success",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#f472b6",
+          timer: 2000,
+        });
       })
       .catch(() => {
-        alert("링크 복사에 실패했습니다. 다시 시도해주세요.");
+        Swal.fire({
+          title: "복사 실패",
+          text: "링크 복사에 실패했습니다. 다시 시도해주세요.",
+          icon: "error",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#f472b6",
+        });
       });
   };
 
