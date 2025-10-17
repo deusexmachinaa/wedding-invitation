@@ -82,12 +82,12 @@ export const ContactSection = ({ groom, bride }: ContactSectionProps) => {
                 "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
             }}
           >
-            <span className="text-pink-400 font-semibold">
-              축하 메시지를 전해주세요.
+            <span className="text-gray-700 font-semibold">
+              축하 메시지를 전해주세요
             </span>
             <br />
-            <span className="text-pink-400 font-semibold">
-              언제든지 연락 부탁드립니다.
+            <span className="text-gray-700 font-semibold">
+              언제든지 연락 부탁드립니다
             </span>
           </p>
         </div>
