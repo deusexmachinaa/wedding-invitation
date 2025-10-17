@@ -61,7 +61,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
   const currentSong = backgroundMusic?.songs?.[currentSongIndex];
   const totalSongs = backgroundMusic?.songs?.length || 0;
 
-  // 🎯 간단한 진행바 핸들러들 (마우스/터치 X 좌표 기반)
+  // 간단한 진행바 핸들러들 (마우스/터치 X 좌표 기반)
   const getProgressFromClientX = (element: HTMLElement, clientX: number) => {
     const rect = element.getBoundingClientRect();
     const x = clientX - rect.left;
@@ -343,7 +343,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
     }
   }, [totalSongs, currentSongIndex, isPlaying]);
 
-  // 드래그 힌트 자동 숨김 (3초 후)
+  // 드래그 힌트 자동 숨김 (2초 후)
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowDragHint(false);
@@ -452,7 +452,7 @@ export const StickyMusicPlayer: React.FC<StickyMusicPlayerProps> = ({
             animate={{
               opacity: 1,
               y: 0,
-              x: showDragHint ? [0, -8, 8, -8, 8, -4, 4, 0] : 0,
+              x: showDragHint ? [0, -8, 8, -8, 8, -4, 4, -2, 2, 0] : 0,
               scale: isDragging ? 1.05 : 1,
             }}
             exit={{ opacity: 0, y: 100, scale: 0.8 }}
