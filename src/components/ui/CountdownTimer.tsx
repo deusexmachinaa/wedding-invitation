@@ -216,18 +216,49 @@ export const CountdownTimer = ({
 
     const title = `${groomName} ❤️ ${brideName} 결혼식`;
     const venueName = ceremony.hall
-      ? `${ceremony.venue} ${ceremony.hall}`
+      ? `${ceremony.venue} ${ceremony.floor ? ceremony.floor + " " : ""}${
+          ceremony.hall
+        }`
       : ceremony.venue;
     const details = `${groomName}과 ${brideName}의 결혼식에 초대합니다.\n\n장소: ${venueName}\n주소: ${ceremony.address}`;
     const location = `${venueName}, ${ceremony.address}`;
 
+    // 1440분 = 24시간 (하루 전)
     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
       title
     )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
       details
-    )}&location=${encodeURIComponent(location)}`;
+    )}&location=${encodeURIComponent(location)}&add=1440`;
 
-    window.open(googleCalendarUrl, "_blank");
+    // 모바일 감지
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
+    if (isMobile) {
+      // 모바일에서는 Google Calendar 앱 열기 시도
+      const isAndroid = /Android/i.test(navigator.userAgent);
+
+      if (isAndroid) {
+        // Android: Google Calendar 앱 인텐트 시도
+        const intentUrl = `intent://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+          title
+        )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
+          details
+        )}&location=${encodeURIComponent(
+          location
+        )}&add=1440#Intent;scheme=https;package=com.google.android.calendar;end`;
+
+        window.location.href = intentUrl;
+      } else {
+        // iOS: 웹 URL (사파리에서 Google Calendar 웹 열림)
+        window.location.href = googleCalendarUrl;
+      }
+    } else {
+      // 데스크톱: 새 탭에서 열기
+      window.open(googleCalendarUrl, "_blank");
+    }
   };
 
   // .ics 파일 다운로드 (Apple Calendar, Outlook 등)
@@ -235,7 +266,9 @@ export const CountdownTimer = ({
     const startDateTime = `${ceremony.date.replace(/-/g, "")}T162000`;
     const endDateTime = `${ceremony.date.replace(/-/g, "")}T182000`;
     const venueName = ceremony.hall
-      ? `${ceremony.venue} ${ceremony.hall}`
+      ? `${ceremony.venue} ${ceremony.floor ? ceremony.floor + " " : ""}${
+          ceremony.hall
+        }`
       : ceremony.venue;
     const location = `${venueName}, ${ceremony.address}`;
 
