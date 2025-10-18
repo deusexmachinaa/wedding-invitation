@@ -237,18 +237,18 @@ export const CountdownTimer = ({
       );
 
     if (isMobile) {
-      // 모바일에서는 Google Calendar 앱 열기 시도
       const isAndroid = /Android/i.test(navigator.userAgent);
 
       if (isAndroid) {
-        // Android: Google Calendar 앱 인텐트 시도
+        // Android: 기본 캘린더 앱 (갤럭시 캘린더 등) 열기
+        // 패키지를 지정하지 않으면 사용자의 기본 캘린더 앱이 열립니다
         const intentUrl = `intent://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
           title
         )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
           details
         )}&location=${encodeURIComponent(
           location
-        )}&add=1440#Intent;scheme=https;package=com.google.android.calendar;end`;
+        )}&add=1440#Intent;scheme=https;action=android.intent.action.INSERT;type=vnd.android.cursor.item/event;end`;
 
         window.location.href = intentUrl;
       } else {
