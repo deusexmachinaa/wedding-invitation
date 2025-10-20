@@ -209,8 +209,8 @@ export const CountdownTimer = ({
   const calendarDays = generateCalendarDays();
   const weddingDate = new Date(ceremony.date);
 
-  // Google Calendar 링크 생성
-  const addToGoogleCalendar = () => {
+  // 캘린더에 일정 추가
+  const addToCalendar = () => {
     const startDateTime = `${ceremony.date.replace(/-/g, "")}T162000`;
     const endDateTime = `${ceremony.date.replace(/-/g, "")}T182000`; // 2시간 후
 
@@ -223,85 +223,14 @@ export const CountdownTimer = ({
     const details = `${groomName}과 ${brideName}의 결혼식에 초대합니다.\n\n장소: ${venueName}\n주소: ${ceremony.address}`;
     const location = `${venueName}, ${ceremony.address}`;
 
-    // 1440분 = 24시간 (하루 전)
     const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
       title
     )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
       details
-    )}&location=${encodeURIComponent(location)}&add=1440`;
+    )}&location=${encodeURIComponent(location)}`;
 
-    // 모바일 감지
-    const isMobile =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      );
-
-    if (isMobile) {
-      const isAndroid = /Android/i.test(navigator.userAgent);
-
-      if (isAndroid) {
-        // Android: 기본 캘린더 앱 (갤럭시 캘린더 등) 열기
-        // 패키지를 지정하지 않으면 사용자의 기본 캘린더 앱이 열립니다
-        const intentUrl = `intent://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-          title
-        )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
-          details
-        )}&location=${encodeURIComponent(
-          location
-        )}&add=1440#Intent;scheme=https;action=android.intent.action.INSERT;type=vnd.android.cursor.item/event;end`;
-
-        window.location.href = intentUrl;
-      } else {
-        // iOS: 웹 URL (사파리에서 Google Calendar 웹 열림)
-        window.location.href = googleCalendarUrl;
-      }
-    } else {
-      // 데스크톱: 새 탭에서 열기
-      window.open(googleCalendarUrl, "_blank");
-    }
-  };
-
-  // .ics 파일 다운로드 (Apple Calendar, Outlook 등)
-  const downloadICSFile = () => {
-    const startDateTime = `${ceremony.date.replace(/-/g, "")}T162000`;
-    const endDateTime = `${ceremony.date.replace(/-/g, "")}T182000`;
-    const venueName = ceremony.hall
-      ? `${ceremony.venue} ${ceremony.floor ? ceremony.floor + " " : ""}${
-          ceremony.hall
-        }`
-      : ceremony.venue;
-    const location = `${venueName}, ${ceremony.address}`;
-
-    const icsContent = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "PRODID:-//Wedding Invitation//Calendar//KO",
-      "CALSCALE:GREGORIAN",
-      "METHOD:PUBLISH",
-      "BEGIN:VEVENT",
-      `DTSTART:${startDateTime}`,
-      `DTEND:${endDateTime}`,
-      `SUMMARY:${groomName} ❤️ ${brideName} 결혼식`,
-      `DESCRIPTION:${groomName}과 ${brideName}의 결혼식에 초대합니다.\\n\\n장소: ${venueName}\\n주소: ${ceremony.address}`,
-      `LOCATION:${location}`,
-      "STATUS:CONFIRMED",
-      "SEQUENCE:0",
-      "BEGIN:VALARM",
-      "TRIGGER:-P1D",
-      "DESCRIPTION:내일 결혼식이 있습니다",
-      "ACTION:DISPLAY",
-      "END:VALARM",
-      "END:VEVENT",
-      "END:VCALENDAR",
-    ].join("\r\n");
-
-    const blob = new Blob([icsContent], {
-      type: "text/calendar;charset=utf-8",
-    });
-    const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = `${groomName}_${brideName}_wedding.ics`;
-    link.click();
+    // 모바일과 데스크톱 모두 새 탭에서 Google Calendar 웹으로 열기
+    window.open(googleCalendarUrl, "_blank");
   };
 
   return (
@@ -545,7 +474,7 @@ export const CountdownTimer = ({
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={addToGoogleCalendar}
+                  onClick={addToCalendar}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
                   style={{
                     fontFamily:
@@ -555,20 +484,6 @@ export const CountdownTimer = ({
                   <CalendarPlus className="w-5 h-5" />
                   Google 캘린더에 추가
                 </motion.button>
-
-                {/* <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={downloadICSFile}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
-                  style={{
-                    fontFamily:
-                      "Gowun Dodum, var(--font-gowun-dodum), system-ui, -apple-system, sans-serif",
-                  }}
-                >
-                  <CalendarPlus className="w-5 h-5" />
-                  캘린더 파일 다운로드
-                </motion.button> */}
               </div>
             </motion.div>
           </motion.div>
