@@ -228,37 +228,61 @@ export const CountdownTimer = ({
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       );
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // 모바일: .ics 파일 생성 후 기본 캘린더 앱으로 열기
-      const icsContent = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//Wedding Invitation//Calendar//KO",
-        "CALSCALE:GREGORIAN",
-        "METHOD:PUBLISH",
-        "BEGIN:VEVENT",
-        `DTSTART:${startDateTime}`,
-        `DTEND:${endDateTime}`,
-        `SUMMARY:${title}`,
-        `DESCRIPTION:${details.replace(/\n/g, "\\n")}`,
-        `LOCATION:${location}`,
-        "STATUS:CONFIRMED",
-        "SEQUENCE:0",
-        "BEGIN:VALARM",
-        "TRIGGER:-P1D",
-        "DESCRIPTION:내일 결혼식이 있습니다",
-        "ACTION:DISPLAY",
-        "END:VALARM",
-        "END:VEVENT",
-        "END:VCALENDAR",
-      ].join("\r\n");
+      // 결혼식 날짜를 Date 객체로 변환
+      const weddingDateTime = new Date(`${ceremony.date}T16:20:00`);
+      const endTime = new Date(weddingDateTime.getTime() + 2 * 60 * 60 * 1000); // 2시간 후
 
-      // data URI를 사용하여 기본 캘린더 앱 열기 (다운로드 없이)
-      const dataUrl = `data:text/calendar;charset=utf-8,${encodeURIComponent(
-        icsContent
-      )}`;
-      window.location.href = dataUrl;
+      if (isAndroid) {
+        // Android: Intent를 사용하여 기본 캘린더 앱 열기
+        const intentUrl = `intent://calendar/#Intent;scheme=content;action=android.intent.action.INSERT;type=vnd.android.cursor.item/event;S.title=${encodeURIComponent(
+          title
+        )};l.beginTime=${weddingDateTime.getTime()};l.endTime=${endTime.getTime()};S.description=${encodeURIComponent(
+          details
+        )};S.eventLocation=${encodeURIComponent(location)};end`;
+
+        window.location.href = intentUrl;
+      } else if (isIOS) {
+        // iOS: .ics 파일 생성 후 기본 캘린더 앱으로 열기
+        const icsContent = [
+          "BEGIN:VCALENDAR",
+          "VERSION:2.0",
+          "PRODID:-//Wedding Invitation//Calendar//KO",
+          "CALSCALE:GREGORIAN",
+          "METHOD:PUBLISH",
+          "BEGIN:VEVENT",
+          `DTSTART:${startDateTime}`,
+          `DTEND:${endDateTime}`,
+          `SUMMARY:${title}`,
+          `DESCRIPTION:${details.replace(/\n/g, "\\n")}`,
+          `LOCATION:${location}`,
+          "STATUS:CONFIRMED",
+          "SEQUENCE:0",
+          "BEGIN:VALARM",
+          "TRIGGER:-P1D",
+          "DESCRIPTION:내일 결혼식이 있습니다",
+          "ACTION:DISPLAY",
+          "END:VALARM",
+          "END:VEVENT",
+          "END:VCALENDAR",
+        ].join("\r\n");
+
+        // Blob을 사용하여 .ics 파일 생성 및 다운로드
+        const blob = new Blob([icsContent], {
+          type: "text/calendar;charset=utf-8",
+        });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `wedding_${ceremony.date}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }
     } else {
       // 데스크톱: Google Calendar 웹으로 열기
       const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
