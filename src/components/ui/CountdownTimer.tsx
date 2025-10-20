@@ -251,7 +251,7 @@ export const CountdownTimer = ({
           title
         )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
           details
-        )}&location=${encodeURIComponent(location)}&remind=1440`; // 1440분 = 24시간 = 1일 전 알림
+        )}&location=${encodeURIComponent(location)}`;
 
         window.location.href = googleCalendarUrl;
       }
