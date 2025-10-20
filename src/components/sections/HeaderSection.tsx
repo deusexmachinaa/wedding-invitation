@@ -1,13 +1,11 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { PersonInfo, CeremonyInfo } from "@/types";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Keyboard, EffectCards } from "swiper/modules";
-import type { Swiper as SwiperType } from "swiper";
+import { Pagination, Keyboard } from "swiper/modules";
 import {
   Heart,
   Mail,
@@ -18,15 +16,12 @@ import {
   Presentation,
   Calendar,
   Phone,
-  Clock,
   Info,
-  Home,
 } from "lucide-react";
 
 // Swiper CSS import
 import "swiper/css";
 import "swiper/css/pagination";
-import "swiper/css/effect-cards";
 
 interface HeaderSectionProps {
   groom: PersonInfo;
@@ -159,9 +154,6 @@ export const HeaderSection = ({
     // },
   ];
 
-  const [swiper, setSwiper] = useState<SwiperType | null>(null);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-
   // 섹션으로 스크롤
   const scrollToSection = (sectionId: string) => {
     if (sectionId === "header") {
@@ -229,10 +221,6 @@ export const HeaderSection = ({
               clickable: true,
               bulletClass: "swiper-pagination-bullet-header",
               bulletActiveClass: "swiper-pagination-bullet-active-header",
-            }}
-            onSwiper={setSwiper}
-            onSlideChange={(swiper) => {
-              setCurrentCardIndex(swiper.realIndex);
             }}
             className="pb-4"
           >

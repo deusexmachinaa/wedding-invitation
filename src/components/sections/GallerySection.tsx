@@ -46,7 +46,6 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
 
     // 루프 모드에서 실제 표시되는 슬라이드의 인덱스 계산
     const realIndex = mainSwiper.realIndex;
-    const activeIndex = mainSwiper.activeIndex;
 
     // 루프 모드에서는 realIndex가 정확한 배열 인덱스
     return realIndex;
