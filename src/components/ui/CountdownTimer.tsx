@@ -212,7 +212,7 @@ export const CountdownTimer = ({
   // 캘린더에 일정 추가
   const addToCalendar = () => {
     const startDateTime = `${ceremony.date.replace(/-/g, "")}T162000`;
-    const endDateTime = `${ceremony.date.replace(/-/g, "")}T182000`; // 2시간 후
+    const endDateTime = `${ceremony.date.replace(/-/g, "")}T182000`;
 
     const title = `${groomName} ❤️ ${brideName} 결혼식`;
     const venueName = ceremony.hall
@@ -223,14 +223,52 @@ export const CountdownTimer = ({
     const details = `${groomName}과 ${brideName}의 결혼식에 초대합니다.\n\n장소: ${venueName}\n주소: ${ceremony.address}`;
     const location = `${venueName}, ${ceremony.address}`;
 
-    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-      title
-    )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
-      details
-    )}&location=${encodeURIComponent(location)}`;
+    // 모바일 감지
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
 
-    // 모바일과 데스크톱 모두 새 탭에서 Google Calendar 웹으로 열기
-    window.open(googleCalendarUrl, "_blank");
+    if (isMobile) {
+      // 모바일: .ics 파일 생성 후 기본 캘린더 앱으로 열기
+      const icsContent = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Wedding Invitation//Calendar//KO",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "BEGIN:VEVENT",
+        `DTSTART:${startDateTime}`,
+        `DTEND:${endDateTime}`,
+        `SUMMARY:${title}`,
+        `DESCRIPTION:${details.replace(/\n/g, "\\n")}`,
+        `LOCATION:${location}`,
+        "STATUS:CONFIRMED",
+        "SEQUENCE:0",
+        "BEGIN:VALARM",
+        "TRIGGER:-P1D",
+        "DESCRIPTION:내일 결혼식이 있습니다",
+        "ACTION:DISPLAY",
+        "END:VALARM",
+        "END:VEVENT",
+        "END:VCALENDAR",
+      ].join("\r\n");
+
+      // data URI를 사용하여 기본 캘린더 앱 열기 (다운로드 없이)
+      const dataUrl = `data:text/calendar;charset=utf-8,${encodeURIComponent(
+        icsContent
+      )}`;
+      window.location.href = dataUrl;
+    } else {
+      // 데스크톱: Google Calendar 웹으로 열기
+      const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+        title
+      )}&dates=${startDateTime}/${endDateTime}&details=${encodeURIComponent(
+        details
+      )}&location=${encodeURIComponent(location)}`;
+
+      window.open(googleCalendarUrl, "_blank");
+    }
   };
 
   return (
@@ -482,7 +520,7 @@ export const CountdownTimer = ({
                   }}
                 >
                   <CalendarPlus className="w-5 h-5" />
-                  Google 캘린더에 추가
+                  캘린더에 추가
                 </motion.button>
               </div>
             </motion.div>
