@@ -127,6 +127,8 @@ const AccountCard = ({
                         alt="카카오페이"
                         width={32}
                         height={13}
+                        quality={80}
+                        priority
                       />
                       <span className="text-[#3C1E1E] font-semibold">
                         카카오페이
@@ -149,6 +151,8 @@ const AccountCard = ({
                         alt="토스"
                         width={32}
                         height={16}
+                        quality={80}
+                        priority
                       />
                       <span className="text-white font-semibold">토스</span>
                     </button>

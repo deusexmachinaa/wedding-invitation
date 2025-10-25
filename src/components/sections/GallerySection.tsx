@@ -383,7 +383,7 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
                 }}
                 className="max-h-[80vh] w-full"
               >
-                {images.map((image) => (
+                {images.map((image, index) => (
                   <SwiperSlide key={image.id}>
                     <div
                       className="relative w-full h-full flex items-center justify-center cursor-pointer"
@@ -400,8 +400,8 @@ export const GallerySection = ({ images }: GallerySectionProps) => {
                         height={900}
                         className="w-full h-auto max-h-[100vh] md:max-h-[80vh] object-contain md:rounded-lg pointer-events-none"
                         quality={90}
-                        priority
-                        loading="eager"
+                        priority={index === currentIndex}
+                        loading={index === currentIndex ? "eager" : "lazy"}
                       />
                     </div>
                   </SwiperSlide>

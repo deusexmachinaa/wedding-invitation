@@ -98,6 +98,8 @@ export const PhotoBoothSection = () => {
                         fill
                         className="object-cover"
                         sizes="(max-width: 768px) 50vw, 25vw"
+                        quality={70}
+                        loading="lazy"
                       />
                     </div>
                     {/* 스타일 설명 */}

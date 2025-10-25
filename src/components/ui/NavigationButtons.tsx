@@ -149,6 +149,8 @@ export const NavigationButtons = ({
           width={16}
           height={16}
           className="object-contain"
+          quality={80}
+          priority
         />
       ),
       color: "bg-green-100 text-green-600 hover:bg-green-200",
@@ -164,6 +166,8 @@ export const NavigationButtons = ({
           width={16}
           height={16}
           className="object-contain"
+          quality={80}
+          priority
         />
       ),
       color: "bg-yellow-100 text-yellow-600 hover:bg-yellow-200",
@@ -179,6 +183,8 @@ export const NavigationButtons = ({
           width={16}
           height={16}
           className="object-contain"
+          quality={80}
+          priority
         />
       ),
       color: "bg-blue-100 text-blue-600 hover:bg-blue-200",
